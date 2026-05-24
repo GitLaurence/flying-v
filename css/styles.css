@@ -1274,6 +1274,14 @@ button { font-family: inherit; }
 
   .site-nav.is-open { transform: translateX(0); }
 
+  /* Always show dark links inside the white mobile panel,
+     regardless of whether the header is in transparent mode */
+  .site-nav.is-open .site-nav__link,
+  .site-header.is-transparent .site-nav.is-open .site-nav__link,
+  .site-header.is-transparent .site-nav.is-open .site-nav__link:hover {
+    color: var(--color-gray-800);
+  }
+
   .site-nav__list { flex-direction: column; align-items: flex-start; gap: 0; }
 
   .site-nav__list li { width: 100%; border-bottom: var(--border-width) solid var(--color-border); }
@@ -1283,6 +1291,9 @@ button { font-family: inherit; }
     padding: var(--space-5) 0;
     font-size: var(--text-lg);
   }
+
+  .site-nav__link:hover,
+  .site-nav__link.is-active { color: var(--color-primary); }
 
   .site-header__actions .btn { display: none; }
   .site-header__actions .hamburger { display: flex; }
