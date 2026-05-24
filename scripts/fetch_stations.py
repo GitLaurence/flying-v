@@ -90,6 +90,37 @@ REGION_LABELS = {
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
+def make_display_name(raw_name, tags):
+    """Return a descriptive title for stations that OSM only tagged as 'Flying V'."""
+    # Strip generic suffixes: "Flying V Gasoline Station" → "Flying V"
+    normalized = re.sub(
+        r'\s+(gas(oline)?\s+)?station\s*$', '', raw_name, flags=re.IGNORECASE
+    ).strip()
+
+    if normalized.lower() not in ("flying v", "flying-v", "flyingv"):
+        return raw_name  # already has a unique name
+
+    # Build a suffix from the most specific address parts available
+    street    = tags.get("addr:street", "")
+    barangay  = tags.get("addr:barangay", "")
+    city      = tags.get("addr:city") or tags.get("addr:municipality") or ""
+    province  = tags.get("addr:province", "")
+    location  = city or province
+
+    if street and location:
+        suffix = f"{street}, {location}"
+    elif street:
+        suffix = street
+    elif barangay and location:
+        suffix = f"{barangay}, {location}"
+    elif location:
+        suffix = location
+    else:
+        return raw_name  # no address data — leave as-is
+
+    return f"Flying V – {suffix}"
+
+
 def guess_region(tags):
     for field in ("addr:city", "addr:municipality", "addr:province", "addr:region"):
         val = tags.get(field, "")
@@ -149,7 +180,8 @@ def fetch_stations():
 
     for el in elements:
         tags = el.get("tags", {})
-        name = (tags.get("name") or tags.get("brand") or "Flying V").strip()
+        raw_name = (tags.get("name") or tags.get("brand") or "Flying V").strip()
+        name = make_display_name(raw_name, tags)
 
         lat = el.get("lat") or el.get("center", {}).get("lat")
         lon = el.get("lon") or el.get("center", {}).get("lon")
