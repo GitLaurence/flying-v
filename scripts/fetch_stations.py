@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 """
-fetch_stations.py — Query OpenStreetMap for all Flying V stations in the Philippines.
+fetch_stations.py — Fetch Flying V stations from OpenStreetMap + Google Places.
 
-Usage:
-    python3 fetch_stations.py                        # table + CSV + HTML snippet
-    python3 fetch_stations.py --update-locations     # inject directly into locations.html
-    python3 fetch_stations.py --csv                  # CSV only
-    python3 fetch_stations.py --html                 # HTML snippet file only
-    python3 fetch_stations.py --json                 # raw JSON to stdout
+Sources
+-------
+1. OpenStreetMap (Overpass API) — free, no key needed
+2. Google Places Text Search  — optional; set GOOGLE_MAPS_API_KEY env var
+   or pass --google-key. Adds stations missing from OSM. Requires a Google
+   Cloud project with the Places API enabled.
+   Add the key as a GitHub Secret named GOOGLE_MAPS_API_KEY.
+
+Usage
+-----
+    python3 scripts/fetch_stations.py --update-locations
+    python3 scripts/fetch_stations.py --update-locations --google-key YOUR_KEY
+    python3 scripts/fetch_stations.py --csv
+    python3 scripts/fetch_stations.py --json
 
 No third-party dependencies — uses stdlib only.
 """
@@ -18,13 +26,17 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.request
 import urllib.parse
 from datetime import datetime, timezone
 
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+# ── constants ─────────────────────────────────────────────────────────────────
 
-QUERY = """
+OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
+
+OSM_QUERY = """
 [out:json][timeout:90];
 area["name"="Philippines"]["admin_level"="2"]->.ph;
 (
@@ -36,6 +48,33 @@ area["name"="Philippines"]["admin_level"="2"]->.ph;
 );
 out center body;
 """
+
+# Spread queries across regions so Google returns localised results
+GOOGLE_QUERIES = [
+    "Flying V gas station Metro Manila Philippines",
+    "Flying V gas station Quezon City Philippines",
+    "Flying V gas station Caloocan Valenzuela Philippines",
+    "Flying V gas station Pasig Marikina Philippines",
+    "Flying V gas station Makati Taguig Philippines",
+    "Flying V gas station Pampanga Bulacan Philippines",
+    "Flying V gas station Batangas Laguna Cavite Philippines",
+    "Flying V gas station Rizal Quezon Province Philippines",
+    "Flying V gas station Tarlac Nueva Ecija Philippines",
+    "Flying V gas station Pangasinan La Union Philippines",
+    "Flying V gas station Ilocos Philippines",
+    "Flying V gas station Cagayan Isabela Philippines",
+    "Flying V gas station Albay Camarines Sur Philippines",
+    "Flying V gas station Bataan Zambales Philippines",
+    "Flying V gas station Cebu Philippines",
+    "Flying V gas station Iloilo Bacolod Philippines",
+    "Flying V gas station Leyte Samar Philippines",
+    "Flying V gas station Bohol Dumaguete Philippines",
+    "Flying V gas station Davao Philippines",
+    "Flying V gas station Cagayan de Oro Iligan Philippines",
+    "Flying V gas station General Santos Koronadal Philippines",
+    "Flying V gas station Zamboanga Philippines",
+    "Flying V gas station Butuan Surigao Philippines",
+]
 
 REGION_MAP = {
     # NCR
@@ -53,15 +92,20 @@ REGION_MAP = {
     "Nueva Vizcaya": "luzon", "Quirino": "luzon",
     "Albay": "luzon", "Camarines Norte": "luzon", "Camarines Sur": "luzon",
     "Catanduanes": "luzon", "Masbate": "luzon", "Sorsogon": "luzon",
-    "Legazpi": "luzon", "Naga": "luzon", "Tuguegarao": "luzon",
-    "Angeles": "luzon", "San Fernando": "luzon",
+    "Legazpi City": "luzon", "Naga City": "luzon", "Tuguegarao": "luzon",
+    "Angeles": "luzon", "San Fernando": "luzon", "Subic": "luzon",
+    "Lucena": "luzon", "Lipa": "luzon", "Antipolo": "luzon",
+    "Biñan": "luzon", "Santa Rosa": "luzon", "Calamba": "luzon",
+    "Bacoor": "luzon", "Dasmariñas": "luzon", "Imus": "luzon",
     # Visayas
     "Cebu": "visayas", "Cebu City": "visayas", "Mandaue": "visayas",
-    "Lapu-Lapu": "visayas", "Talisay": "visayas",
+    "Lapu-Lapu": "visayas", "Talisay": "visayas", "Liloan": "visayas",
     "Iloilo": "visayas", "Bacolod": "visayas", "Dumaguete": "visayas",
-    "Tacloban": "visayas", "Ormoc": "visayas",
-    "Bohol": "visayas", "Negros Occidental": "visayas", "Negros Oriental": "visayas",
+    "Tacloban": "visayas", "Ormoc": "visayas", "Palo": "visayas",
+    "Bohol": "visayas", "Tagbilaran": "visayas",
+    "Negros Occidental": "visayas", "Negros Oriental": "visayas",
     "Leyte": "visayas", "Eastern Samar": "visayas", "Western Samar": "visayas",
+    "Roxas City": "visayas", "Kabankalan": "visayas",
     # Mindanao
     "Davao": "mindanao", "Davao City": "mindanao",
     "Cagayan de Oro": "mindanao", "Iligan": "mindanao",
@@ -69,9 +113,12 @@ REGION_MAP = {
     "Butuan": "mindanao", "Cotabato": "mindanao",
     "Surigao": "mindanao", "Tagum": "mindanao",
     "Digos": "mindanao", "Koronadal": "mindanao",
+    "Kidapawan": "mindanao", "Pagadian": "mindanao",
+    "Dipolog": "mindanao", "Ozamiz": "mindanao",
+    "Mati": "mindanao", "Bislig": "mindanao",
 }
 
-SERVICE_LABELS = {
+OSM_SERVICE_TAGS = {
     "car_wash": "Car Wash",
     "oil_change": "Oil Change",
     "air": "Tire Inflation",
@@ -87,26 +134,29 @@ REGION_LABELS = {
     "mindanao": "Mindanao",
 }
 
+GENERIC_NAMES = {"flying v", "flying-v", "flyingv", "flying v gasoline station",
+                 "flying v gas station", "flying v petroleum"}
 
-# ── helpers ──────────────────────────────────────────────────────────────────
+# ── helpers ───────────────────────────────────────────────────────────────────
 
-def make_display_name(raw_name, tags):
-    """Return a descriptive title for stations that OSM only tagged as 'Flying V'."""
-    # Strip generic suffixes: "Flying V Gasoline Station" → "Flying V"
+def guess_region(text):
+    t = text.lower()
+    for key, region in REGION_MAP.items():
+        if key.lower() in t:
+            return region
+    return "luzon"
+
+
+def make_display_name(raw_name, street="", barangay="", city="", province=""):
+    """Give generic 'Flying V' entries a location-based title."""
     normalized = re.sub(
         r'\s+(gas(oline)?\s+)?station\s*$', '', raw_name, flags=re.IGNORECASE
     ).strip()
 
-    if normalized.lower() not in ("flying v", "flying-v", "flyingv"):
-        return raw_name  # already has a unique name
+    if normalized.lower() not in GENERIC_NAMES:
+        return raw_name
 
-    # Build a suffix from the most specific address parts available
-    street    = tags.get("addr:street", "")
-    barangay  = tags.get("addr:barangay", "")
-    city      = tags.get("addr:city") or tags.get("addr:municipality") or ""
-    province  = tags.get("addr:province", "")
-    location  = city or province
-
+    location = city or province
     if street and location:
         suffix = f"{street}, {location}"
     elif street:
@@ -116,21 +166,35 @@ def make_display_name(raw_name, tags):
     elif location:
         suffix = location
     else:
-        return raw_name  # no address data — leave as-is
+        return raw_name  # nothing to add
 
     return f"Flying V – {suffix}"
 
 
-def guess_region(tags):
-    for field in ("addr:city", "addr:municipality", "addr:province", "addr:region"):
-        val = tags.get(field, "")
-        for key, region in REGION_MAP.items():
-            if key.lower() in val.lower():
-                return region
-    return "luzon"
+def is_complete(s):
+    """Return False for entries with no usable address information."""
+    addr = s["address"].strip()
+    # Address is missing or just the country name
+    if not addr or addr.lower() == "philippines":
+        return False
+    # make_display_name couldn't find any location — still fully generic
+    if s["name"].strip().lower() in GENERIC_NAMES:
+        return False
+    return True
 
 
-def build_address(tags):
+def are_nearby(s1, s2, threshold=0.002):
+    """True if two stations are within ~200 m of each other."""
+    try:
+        return (abs(float(s1["lat"]) - float(s2["lat"])) < threshold and
+                abs(float(s1["lon"]) - float(s2["lon"])) < threshold)
+    except (TypeError, ValueError):
+        return False
+
+
+# ── OSM source ────────────────────────────────────────────────────────────────
+
+def _osm_build_address(tags):
     addr = tags.get("addr:full", "")
     if not addr:
         parts = [
@@ -145,78 +209,177 @@ def build_address(tags):
     return addr or "Philippines"
 
 
-def get_services(tags):
+def _osm_get_services(tags):
     services = []
     for fuel in ("fuel:octane_91", "fuel:octane_95", "fuel:diesel"):
         if tags.get(fuel) == "yes":
             label = fuel.replace("fuel:octane_", "RON ").replace("fuel:diesel", "Diesel")
             services.append(label)
-    for osm_key, label in SERVICE_LABELS.items():
+    for osm_key, label in OSM_SERVICE_TAGS.items():
         if tags.get(osm_key) == "yes" or tags.get("service:" + osm_key) == "yes":
             services.append(label)
     return services or ["Gasoline", "Diesel"]
 
 
-# ── fetch ─────────────────────────────────────────────────────────────────────
-
-def fetch_stations():
-    print("Querying OpenStreetMap Overpass API…", file=sys.stderr)
-    data = urllib.parse.urlencode({"data": QUERY}).encode()
+def fetch_osm():
+    print("OSM: querying Overpass API…", file=sys.stderr)
+    data = urllib.parse.urlencode({"data": OSM_QUERY}).encode()
     req = urllib.request.Request(
         OVERPASS_URL, data=data,
-        headers={
-            "Content-Type": "application/x-www-form-urlencoded",
-            "User-Agent": "FlyingVStationFetcher/1.0 (flyingv.com.ph)",
-        }
+        headers={"Content-Type": "application/x-www-form-urlencoded",
+                 "User-Agent": "FlyingVStationFetcher/1.0"},
     )
     with urllib.request.urlopen(req, timeout=120) as resp:
         raw = json.load(resp)
 
     elements = raw.get("elements", [])
-    print(f"OSM returned {len(elements)} elements.", file=sys.stderr)
+    print(f"OSM: {len(elements)} elements returned.", file=sys.stderr)
 
-    stations = []
-    seen = set()
-
+    stations, seen = [], set()
     for el in elements:
         tags = el.get("tags", {})
-        raw_name = (tags.get("name") or tags.get("brand") or "Flying V").strip()
-        name = make_display_name(raw_name, tags)
-
         lat = el.get("lat") or el.get("center", {}).get("lat")
         lon = el.get("lon") or el.get("center", {}).get("lon")
-        coord_key = (round(float(lat), 4), round(float(lon), 4)) if lat and lon else name
-        if coord_key in seen:
+        key = (round(float(lat), 4), round(float(lon), 4)) if (lat and lon) else id(el)
+        if key in seen:
             continue
-        seen.add(coord_key)
+        seen.add(key)
 
-        region = guess_region(tags)
+        street   = tags.get("addr:street", "")
+        barangay = tags.get("addr:barangay", "")
+        city     = tags.get("addr:city") or tags.get("addr:municipality") or ""
+        province = tags.get("addr:province", "")
+        raw_name = (tags.get("name") or tags.get("brand") or "Flying V").strip()
+
         stations.append({
-            "name": name,
-            "address": build_address(tags),
-            "city": tags.get("addr:city") or tags.get("addr:municipality") or "",
-            "province": tags.get("addr:province", ""),
-            "region": region,
-            "services": get_services(tags),
-            "hours": tags.get("opening_hours", ""),
-            "phone": tags.get("phone", tags.get("contact:phone", "")),
-            "lat": lat,
-            "lon": lon,
-            "osm_id": f"{el['type']}/{el['id']}",
+            "name":     make_display_name(raw_name, street, barangay, city, province),
+            "address":  _osm_build_address(tags),
+            "city":     city,
+            "province": province,
+            "region":   guess_region(" ".join([city, province, tags.get("addr:region", "")])),
+            "services": _osm_get_services(tags),
+            "hours":    tags.get("opening_hours", ""),
+            "phone":    tags.get("phone", tags.get("contact:phone", "")),
+            "lat":      lat,
+            "lon":      lon,
+            "source":   "osm",
+            "osm_id":   f"{el['type']}/{el['id']}",
         })
 
-    stations.sort(key=lambda s: (s["region"], s["city"], s["name"]))
-    print(f"Deduplicated to {len(stations)} unique stations.", file=sys.stderr)
+    before = len(stations)
+    stations = [s for s in stations if is_complete(s)]
+    print(f"OSM: {before - len(stations)} incomplete entries removed, "
+          f"{len(stations)} kept.", file=sys.stderr)
     return stations
 
 
-# ── output formatters ─────────────────────────────────────────────────────────
+# ── Google Places source ──────────────────────────────────────────────────────
+
+def _google_fetch_page(query, api_key, page_token=None):
+    params = {"query": query, "key": api_key, "language": "en"}
+    if page_token:
+        params["pagetoken"] = page_token
+    url = GOOGLE_PLACES_URL + "?" + urllib.parse.urlencode(params)
+    with urllib.request.urlopen(url, timeout=30) as resp:
+        return json.load(resp)
+
+
+def _station_from_google_place(place):
+    raw_name = place.get("name", "Flying V").strip()
+    formatted = place.get("formatted_address", "Philippines")
+    # Strip trailing ", Philippines"
+    addr = re.sub(r",?\s*Philippines\s*$", "", formatted).strip()
+
+    # Extract city as the last meaningful component before the country
+    parts = [p.strip() for p in addr.split(",")]
+    city = parts[-1] if len(parts) > 1 else ""
+
+    loc = place.get("geometry", {}).get("location", {})
+    lat, lon = loc.get("lat"), loc.get("lng")
+
+    region = guess_region(formatted)
+    name = make_display_name(raw_name, city=city)
+
+    return {
+        "name":     name,
+        "address":  addr,
+        "city":     city,
+        "province": "",
+        "region":   region,
+        "services": ["Gasoline", "Diesel"],
+        "hours":    "",
+        "phone":    "",
+        "lat":      lat,
+        "lon":      lon,
+        "source":   "google",
+        "osm_id":   f"google/{place.get('place_id', '')}",
+    }
+
+
+def fetch_google(api_key):
+    print(f"Google Places: running {len(GOOGLE_QUERIES)} queries…", file=sys.stderr)
+    stations, seen_ids = [], set()
+
+    for i, query in enumerate(GOOGLE_QUERIES, 1):
+        print(f"  [{i}/{len(GOOGLE_QUERIES)}] {query}", file=sys.stderr)
+        page_token = None
+        for page in range(3):           # max 3 pages = 60 results per query
+            if page > 0:
+                time.sleep(2)           # Google requires a short delay before next_page_token
+            try:
+                data = _google_fetch_page(query, api_key, page_token)
+            except Exception as exc:
+                print(f"    WARNING: {exc}", file=sys.stderr)
+                break
+
+            status = data.get("status")
+            if status not in ("OK", "ZERO_RESULTS"):
+                print(f"    WARNING: status={status}", file=sys.stderr)
+                break
+
+            for place in data.get("results", []):
+                pid = place.get("place_id", "")
+                if pid in seen_ids:
+                    continue
+                seen_ids.add(pid)
+                s = _station_from_google_place(place)
+                if is_complete(s):
+                    stations.append(s)
+
+            page_token = data.get("next_page_token")
+            if not page_token:
+                break
+
+        time.sleep(0.3)                 # polite delay between queries
+
+    print(f"Google Places: {len(stations)} complete stations found.", file=sys.stderr)
+    return stations
+
+
+# ── merge ─────────────────────────────────────────────────────────────────────
+
+def merge_sources(primary, secondary):
+    """Add secondary stations that aren't already represented in primary."""
+    result = list(primary)
+    added = 0
+    for s2 in secondary:
+        if not any(are_nearby(s2, s1) for s1 in result):
+            result.append(s2)
+            added += 1
+    print(f"Merge: +{added} stations from secondary source "
+          f"({len(result)} total).", file=sys.stderr)
+    return result
+
+
+# ── output ────────────────────────────────────────────────────────────────────
 
 def print_table(stations):
-    print(f"\n{'#':<4} {'Name':<35} {'Address':<50} {'City':<20} {'Region':<10}")
-    print("-" * 125)
+    print(f"\n{'#':<4} {'Name':<40} {'Address':<45} {'City':<18} {'Src':<6} {'Region'}")
+    print("-" * 122)
     for i, s in enumerate(stations, 1):
-        print(f"{i:<4} {s['name']:<35} {s['address'][:49]:<50} {s['city'][:19]:<20} {s['region']:<10}")
+        src = s.get("source", "")[:6]
+        print(f"{i:<4} {s['name'][:39]:<40} {s['address'][:44]:<45} "
+              f"{s['city'][:17]:<18} {src:<6} {s['region']}")
     print(f"\nTotal: {len(stations)} stations")
 
 
@@ -225,7 +388,7 @@ def write_csv(stations, path="scripts/flying_v_stations.csv"):
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "name", "address", "city", "province", "region",
-            "services", "hours", "phone", "lat", "lon", "osm_id",
+            "services", "hours", "phone", "lat", "lon", "source", "osm_id",
         ])
         writer.writeheader()
         for s in stations:
@@ -245,11 +408,11 @@ def station_card_html(s):
         if s["hours"] else ""
     )
     phone_part = (
-        f'\n              <a href="tel:{s["phone"]}" class="station-card__phone">&#x260E; {s["phone"]}</a>'
+        f'\n              <a href="tel:{s["phone"]}" class="station-card__phone">'
+        f'&#x260E; {s["phone"]}</a>'
         if s["phone"] else ""
     )
     region_label = REGION_LABELS.get(s["region"], s["region"].upper())
-
     return (
         f'          <article class="station-card" data-region="{s["region"]}">\n'
         f'            <div class="station-card__header">\n'
@@ -268,10 +431,12 @@ def station_card_html(s):
 
 def build_grid_html(stations):
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    sources = set(s.get("source", "osm") for s in stations)
     groups = {r: [s for s in stations if s["region"] == r]
               for r in ("ncr", "luzon", "visayas", "mindanao")}
 
-    lines = [f"          <!-- STATIONS:START — {len(stations)} stations, fetched {timestamp} -->"]
+    lines = [f"          <!-- STATIONS:START — {len(stations)} stations "
+             f"({', '.join(sorted(sources))}), fetched {timestamp} -->"]
     for region, label in [("ncr", "NCR — Metro Manila"), ("luzon", "Luzon"),
                            ("visayas", "Visayas"), ("mindanao", "Mindanao")]:
         grp = groups[region]
@@ -281,13 +446,6 @@ def build_grid_html(stations):
         lines.extend(station_card_html(s) for s in grp)
     lines.append("          <!-- STATIONS:END -->")
     return "\n".join(lines)
-
-
-def write_html_snippet(stations, path="scripts/station_cards.html"):
-    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(build_grid_html(stations))
-    print(f"HTML snippet saved → {path}", file=sys.stderr)
 
 
 def update_locations_html(stations, path="locations.html"):
@@ -302,32 +460,44 @@ def update_locations_html(stations, path="locations.html"):
         flags=re.DOTALL,
     )
     if count == 0:
-        print(
-            f"ERROR: Could not find <!-- STATIONS:START --> … <!-- STATIONS:END --> markers in {path}",
-            file=sys.stderr,
-        )
+        print(f"ERROR: STATIONS markers not found in {path}", file=sys.stderr)
         sys.exit(1)
 
     with open(path, "w", encoding="utf-8") as f:
         f.write(updated)
-    print(f"locations.html updated with {len(stations)} stations.", file=sys.stderr)
+    print(f"locations.html updated → {len(stations)} stations.", file=sys.stderr)
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="Fetch Flying V stations from OpenStreetMap")
+    parser = argparse.ArgumentParser(
+        description="Fetch Flying V stations from OpenStreetMap (+ optionally Google Places)"
+    )
     parser.add_argument("--update-locations", action="store_true",
-                        help="Inject station cards directly into locations.html")
-    parser.add_argument("--locations-path", default="locations.html",
-                        help="Path to locations.html (default: locations.html)")
-    parser.add_argument("--csv",  action="store_true", help="Save CSV to scripts/flying_v_stations.csv")
-    parser.add_argument("--html", action="store_true", help="Save HTML snippet to scripts/station_cards.html")
-    parser.add_argument("--json", action="store_true", help="Print raw JSON to stdout")
+                        help="Inject cards directly into locations.html")
+    parser.add_argument("--locations-path", default="locations.html")
+    parser.add_argument("--google-key", default=os.environ.get("GOOGLE_MAPS_API_KEY", ""),
+                        help="Google Maps API key (or set GOOGLE_MAPS_API_KEY env var)")
+    parser.add_argument("--csv",  action="store_true")
+    parser.add_argument("--html", action="store_true",
+                        help="Save HTML snippet to scripts/station_cards.html")
+    parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
-    stations = fetch_stations()
+    # ── fetch ──
+    stations = fetch_osm()
 
+    if args.google_key:
+        google_stations = fetch_google(args.google_key)
+        stations = merge_sources(stations, google_stations)
+    else:
+        print("Google Places: skipped (no API key). "
+              "Set GOOGLE_MAPS_API_KEY for fuller coverage.", file=sys.stderr)
+
+    stations.sort(key=lambda s: (s["region"], s["city"], s["name"]))
+
+    # ── output ──
     if args.json:
         print(json.dumps(stations, indent=2, ensure_ascii=False))
         return
@@ -337,10 +507,15 @@ def main():
         write_csv(stations)
         return
 
-    # Default: table + both output files
     print_table(stations)
     write_csv(stations)
-    write_html_snippet(stations)
+
+    if args.html:
+        path = "scripts/station_cards.html"
+        os.makedirs("scripts", exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(build_grid_html(stations))
+        print(f"HTML snippet saved → {path}", file=sys.stderr)
 
 
 if __name__ == "__main__":

@@ -22,8 +22,18 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Fetch stations from OpenStreetMap and update locations.html
-        run: python3 scripts/fetch_stations.py --update-locations
+      - name: Fetch stations (OSM + Google Places if key is set)
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: |
+          if [ -n "$GOOGLE_MAPS_API_KEY" ]; then
+            echo "Google Places API key found — fetching from both OSM and Google."
+            python3 scripts/fetch_stations.py --update-locations --google-key "$GOOGLE_MAPS_API_KEY"
+          else
+            echo "No GOOGLE_MAPS_API_KEY secret set — fetching from OSM only."
+            echo "To enable Google Places, add GOOGLE_MAPS_API_KEY to repository secrets."
+            python3 scripts/fetch_stations.py --update-locations
+          fi
 
       - name: Commit and push if locations.html changed
         run: |
@@ -34,6 +44,6 @@ jobs:
             echo "No changes — station list is already up to date."
           else
             STATION_COUNT=$(grep -c 'class="station-card"' locations.html || true)
-            git commit -m "chore: update Flying V station list from OpenStreetMap (${STATION_COUNT} stations)"
+            git commit -m "chore: update Flying V station list (${STATION_COUNT} stations)"
             git push
           fi
