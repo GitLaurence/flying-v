@@ -1188,6 +1188,8 @@ button { font-family: inherit; }
 }
 .station-card__phone:hover { color: var(--color-primary-dark); }
 
+.station-card.is-hidden { display: none; }
+
 .locator-empty {
   text-align: center;
   padding: var(--space-16) 0;

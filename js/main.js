@@ -186,28 +186,24 @@
     if (!grid) return;
 
     var cards = Array.from(grid.querySelectorAll('.station-card'));
-    if (countEl) countEl.textContent = cards.length;
 
-    // Build a searchable text string per card once, up front
-    var cardSearchTexts = cards.map(function (card) {
-      return [
-        card.dataset.name || '',
-        card.dataset.region || '',
-        card.querySelector('.station-card__name')    ? card.querySelector('.station-card__name').textContent    : '',
-        card.querySelector('.station-card__address') ? card.querySelector('.station-card__address').textContent : ''
-      ].join(' ').toLowerCase();
+    // Use full card textContent so every visible word is searchable:
+    // station name, address, city, services, hours, region badge — all of it.
+    var cardTexts = cards.map(function (card) {
+      return card.textContent.toLowerCase().replace(/\s+/g, ' ');
     });
 
-    function filter() {
+    function runFilter() {
       var keyword = searchEl ? searchEl.value.toLowerCase().trim() : '';
       var region  = regionEl ? regionEl.value : '';
       var visible = 0;
 
       cards.forEach(function (card, i) {
         var okRegion  = !region  || card.dataset.region === region;
-        var okKeyword = !keyword || cardSearchTexts[i].indexOf(keyword) !== -1;
+        var okKeyword = !keyword || cardTexts[i].indexOf(keyword) !== -1;
         var show = okRegion && okKeyword;
-        card.hidden = !show;
+        // Use CSS class toggle — more reliable than the hidden property
+        card.classList.toggle('is-hidden', !show);
         if (show) visible++;
       });
 
@@ -215,16 +211,27 @@
       if (emptyEl) emptyEl.hidden = visible > 0;
     }
 
-    if (btnSearch) btnSearch.addEventListener('click', filter);
-    // Real-time filtering as user types
-    if (searchEl) searchEl.addEventListener('input', filter);
-    if (searchEl) searchEl.addEventListener('keydown', function (e) { if (e.key === 'Enter') filter(); });
-    if (regionEl) regionEl.addEventListener('change', filter);
+    // Set accurate initial count
+    if (countEl) countEl.textContent = cards.length;
+
+    // Debounce helper so rapid typing doesn't thrash the DOM
+    var debounceTimer;
+    function debouncedFilter() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(runFilter, 180);
+    }
+
+    if (btnSearch) btnSearch.addEventListener('click', runFilter);
+    if (searchEl)  searchEl.addEventListener('input',   debouncedFilter);
+    if (searchEl)  searchEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { clearTimeout(debounceTimer); runFilter(); }
+    });
+    if (regionEl) regionEl.addEventListener('change', runFilter);
     if (btnReset) {
       btnReset.addEventListener('click', function () {
         if (searchEl) searchEl.value = '';
         if (regionEl) regionEl.value = '';
-        filter();
+        runFilter();
       });
     }
   }
