@@ -188,14 +188,24 @@
     var cards = Array.from(grid.querySelectorAll('.station-card'));
     if (countEl) countEl.textContent = cards.length;
 
+    // Build a searchable text string per card once, up front
+    var cardSearchTexts = cards.map(function (card) {
+      return [
+        card.dataset.name || '',
+        card.dataset.region || '',
+        card.querySelector('.station-card__name')    ? card.querySelector('.station-card__name').textContent    : '',
+        card.querySelector('.station-card__address') ? card.querySelector('.station-card__address').textContent : ''
+      ].join(' ').toLowerCase();
+    });
+
     function filter() {
       var keyword = searchEl ? searchEl.value.toLowerCase().trim() : '';
       var region  = regionEl ? regionEl.value : '';
       var visible = 0;
 
-      cards.forEach(function (card) {
+      cards.forEach(function (card, i) {
         var okRegion  = !region  || card.dataset.region === region;
-        var okKeyword = !keyword || (card.dataset.name || '').toLowerCase().indexOf(keyword) !== -1;
+        var okKeyword = !keyword || cardSearchTexts[i].indexOf(keyword) !== -1;
         var show = okRegion && okKeyword;
         card.hidden = !show;
         if (show) visible++;
@@ -206,6 +216,8 @@
     }
 
     if (btnSearch) btnSearch.addEventListener('click', filter);
+    // Real-time filtering as user types
+    if (searchEl) searchEl.addEventListener('input', filter);
     if (searchEl) searchEl.addEventListener('keydown', function (e) { if (e.key === 'Enter') filter(); });
     if (regionEl) regionEl.addEventListener('change', filter);
     if (btnReset) {
