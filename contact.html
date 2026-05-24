@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Flying V Petroleum Corporation — send us a message, find our office address, phone, and email.">
+  <title>Contact Us | Flying V Petroleum Corporation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-contact" data-page="contact">
+
+  <!-- ═══════════════════════════════════════════════════════════ HEADER -->
+  <header class="site-header" id="site-header">
+    <div class="container">
+      <a href="index.html" class="site-header__logo" aria-label="Flying V — Home">
+        <div>
+          <span class="site-header__logo-text">Flying V</span>
+          <span class="site-header__logo-sub">Petroleum Corp.</span>
+        </div>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list">
+          <li><a href="index.html"     class="site-nav__link" data-page="home">Home</a></li>
+          <li><a href="about.html"     class="site-nav__link" data-page="about">About</a></li>
+          <li><a href="products.html"  class="site-nav__link" data-page="products">Products</a></li>
+          <li><a href="locations.html" class="site-nav__link" data-page="locations">Locations</a></li>
+          <li><a href="contact.html"   class="site-nav__link" data-page="contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <a href="locations.html" class="btn btn--primary btn--sm">Find a Station</a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════════════════ PAGE HERO -->
+    <section class="page-hero" aria-label="Contact page hero">
+      <div class="container">
+        <span class="section-label page-hero__label">We'd Love to Hear From You</span>
+        <h1 class="page-hero__title">Get in Touch</h1>
+        <p class="page-hero__desc">Questions, feedback, or franchise inquiries — our team is ready to help.</p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ CONTACT BODY -->
+    <section class="section" aria-labelledby="contact-heading">
+      <div class="container">
+        <h2 class="sr-only" id="contact-heading">Contact Section</h2>
+        <div class="contact-grid">
+
+          <!-- ── FORM ── -->
+          <div class="contact-form-wrap">
+            <span class="section-label">Send Us a Message</span>
+            <h2 class="section-title" style="font-size: var(--text-3xl);">Contact Flying V</h2>
+            <div class="section-rule"></div>
+
+            <form id="contact-form" class="contact-form" novalidate>
+
+              <div class="form-row form-row--2">
+                <div class="form-group">
+                  <label for="f-name" class="form-label">Full Name <span class="required" aria-hidden="true">*</span></label>
+                  <input type="text" id="f-name" name="name" class="form-input"
+                         placeholder="Juan dela Cruz" required autocomplete="name">
+                  <span class="form-error" id="f-name-error" role="alert" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="f-email" class="form-label">Email Address <span class="required" aria-hidden="true">*</span></label>
+                  <input type="email" id="f-email" name="email" class="form-input"
+                         placeholder="juan@example.com" required autocomplete="email">
+                  <span class="form-error" id="f-email-error" role="alert" aria-live="polite"></span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="f-subject" class="form-label">Subject <span class="required" aria-hidden="true">*</span></label>
+                <select id="f-subject" name="subject" class="form-select" required>
+                  <option value="">Select a topic…</option>
+                  <option value="general">General Inquiry</option>
+                  <option value="station">Station Complaint / Feedback</option>
+                  <option value="dealer">Dealership / Franchise</option>
+                  <option value="media">Media &amp; Press</option>
+                  <option value="careers">Careers</option>
+                </select>
+                <span class="form-error" id="f-subject-error" role="alert" aria-live="polite"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="f-phone" class="form-label">
+                  Phone Number <span class="optional">(optional)</span>
+                </label>
+                <input type="tel" id="f-phone" name="phone" class="form-input"
+                       placeholder="+63 9XX XXX XXXX" autocomplete="tel">
+              </div>
+
+              <div class="form-group">
+                <label for="f-message" class="form-label">Message <span class="required" aria-hidden="true">*</span></label>
+                <textarea id="f-message" name="message" class="form-input form-textarea"
+                          rows="6" placeholder="Type your message here…" required></textarea>
+                <span class="form-error" id="f-message-error" role="alert" aria-live="polite"></span>
+              </div>
+
+              <button type="submit" class="btn btn--primary btn--lg" id="btn-submit">
+                Send Message
+              </button>
+
+              <div class="form-success" id="form-success" hidden>
+                <p><strong>Thank you!</strong> Your message has been received. We'll get back to you within 2 business days.</p>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- ── CONTACT INFO ── -->
+          <div class="contact-info">
+
+            <div class="contact-info__block">
+              <h3 class="contact-info__heading">Our Office</h3>
+              <address class="contact-info__address">
+                Flying V Petroleum Corporation<br>
+                [Building / Street Address]<br>
+                Makati City, Metro Manila<br>
+                Philippines 1229
+              </address>
+            </div>
+
+            <div class="contact-info__block">
+              <h3 class="contact-info__heading">Contact Details</h3>
+              <ul class="contact-info__list">
+                <li>
+                  <span aria-hidden="true">&#x260E;</span>
+                  <a href="tel:+6328XXXXXXX">+63 (2) 8XXX-XXXX</a>
+                </li>
+                <li>
+                  <span aria-hidden="true">&#x2709;</span>
+                  <a href="mailto:info@flyingv.com.ph">info@flyingv.com.ph</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="contact-info__block">
+              <h3 class="contact-info__heading">Business Hours</h3>
+              <table class="hours-table">
+                <caption class="sr-only">Office Business Hours</caption>
+                <tbody>
+                  <tr>
+                    <td>Monday – Friday</td>
+                    <td>8:00 AM – 5:00 PM</td>
+                  </tr>
+                  <tr>
+                    <td>Saturday</td>
+                    <td>8:00 AM – 12:00 PM</td>
+                  </tr>
+                  <tr>
+                    <td>Sunday &amp; Holidays</td>
+                    <td>Closed</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p style="margin-top: var(--space-3); font-size: var(--text-xs); color: var(--color-text-muted);">
+                Service stations operate on their own schedules — most are open 24 hours.
+              </p>
+            </div>
+
+            <div class="contact-info__block">
+              <h3 class="contact-info__heading">Location Map</h3>
+              <div class="contact-map" role="img" aria-label="Office location map placeholder">
+                <p style="text-align: center; padding: var(--space-4);">&#x1F5FA; Map — Makati City, Metro Manila</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════ FOOTER -->
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="site-footer__top">
+      <div class="container">
+        <div class="site-footer__grid">
+          <div>
+            <span class="site-footer__logo-text">Flying V</span>
+            <p class="site-footer__tagline">Fueling the Philippines Forward — quality petroleum products at hundreds of stations nationwide.</p>
+            <div class="site-footer__socials">
+              <a href="#" class="social-link" aria-label="Facebook">FB</a>
+              <a href="#" class="social-link" aria-label="Twitter">TW</a>
+              <a href="#" class="social-link" aria-label="Instagram">IG</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="site-footer__heading">Quick Links</h3>
+            <ul class="site-footer__links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="products.html">Products</a></li>
+              <li><a href="locations.html">Locations</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="site-footer__heading">Our Products</h3>
+            <ul class="site-footer__links">
+              <li><a href="products.html#fuels">Fuels</a></li>
+              <li><a href="products.html#lubricants">Lubricants</a></li>
+              <li><a href="products.html#auto-services">Auto Services</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="site-footer__heading">Contact Us</h3>
+            <address class="site-footer__address">
+              Flying V Petroleum Corp.<br>
+              Makati City, Metro Manila<br>
+              Philippines
+            </address>
+            <p class="site-footer__contact-item"><a href="tel:+6328XXXXXXX">+63 (2) 8XXX-XXXX</a></p>
+            <p class="site-footer__contact-item"><a href="mailto:info@flyingv.com.ph">info@flyingv.com.ph</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <div class="container">
+        <p class="site-footer__copy">&copy; <span id="footer-year"></span> Flying V Petroleum Corporation. All rights reserved.</p>
+        <div class="site-footer__legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

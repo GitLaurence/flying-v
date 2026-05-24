@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find your nearest Flying V service station across NCR, Luzon, Visayas, and Mindanao.">
+  <title>Locations | Flying V Petroleum Corporation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-locations" data-page="locations">
+
+  <!-- ═══════════════════════════════════════════════════════════ HEADER -->
+  <header class="site-header" id="site-header">
+    <div class="container">
+      <a href="index.html" class="site-header__logo" aria-label="Flying V — Home">
+        <div>
+          <span class="site-header__logo-text">Flying V</span>
+          <span class="site-header__logo-sub">Petroleum Corp.</span>
+        </div>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list">
+          <li><a href="index.html"     class="site-nav__link" data-page="home">Home</a></li>
+          <li><a href="about.html"     class="site-nav__link" data-page="about">About</a></li>
+          <li><a href="products.html"  class="site-nav__link" data-page="products">Products</a></li>
+          <li><a href="locations.html" class="site-nav__link" data-page="locations">Locations</a></li>
+          <li><a href="contact.html"   class="site-nav__link" data-page="contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <a href="locations.html" class="btn btn--primary btn--sm">Find a Station</a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════════════════ PAGE HERO -->
+    <section class="page-hero" aria-label="Locations page hero">
+      <div class="container">
+        <span class="section-label page-hero__label">Station Locator</span>
+        <h1 class="page-hero__title">Find a Station</h1>
+        <p class="page-hero__desc">Hundreds of Flying V stations across Luzon, Visayas, and Mindanao — always near you.</p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ SEARCH BAR -->
+    <section class="section section--light locator-search section--sm" aria-label="Station search">
+      <div class="container">
+        <div class="locator-search__bar" role="search">
+          <div class="locator-search__field">
+            <label for="search-keyword" class="sr-only">Search by city or station name</label>
+            <input type="text"
+                   id="search-keyword"
+                   class="form-input"
+                   placeholder="Search by city or station name…"
+                   autocomplete="off">
+          </div>
+          <div class="locator-search__field">
+            <label for="filter-region" class="sr-only">Filter by region</label>
+            <select id="filter-region" class="form-select">
+              <option value="">All Regions</option>
+              <option value="ncr">NCR — Metro Manila</option>
+              <option value="luzon">Luzon</option>
+              <option value="visayas">Visayas</option>
+              <option value="mindanao">Mindanao</option>
+            </select>
+          </div>
+          <button id="btn-search" class="btn btn--primary">Search</button>
+        </div>
+        <p class="locator-search__count">
+          Showing <strong id="station-count">0</strong> stations
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ STATION GRID -->
+    <section class="section" aria-labelledby="stations-heading">
+      <div class="container">
+        <h2 class="sr-only" id="stations-heading">Station Listings</h2>
+
+        <div class="station-grid" id="station-grid">
+
+          <!-- ── NCR ── -->
+          <article class="station-card" data-region="ncr" data-name="quezon city edsa">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">NCR</span>
+              <h3 class="station-card__name">EDSA, Quezon City</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; 123 EDSA cor. Quezon Ave., Quezon City, Metro Manila</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li><li>Car Wash</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">Open 24 Hours</span>
+              <a href="tel:+6328XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="ncr" data-name="makati ayala">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">NCR</span>
+              <h3 class="station-card__name">Ayala Ave., Makati</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; 456 Ayala Avenue, Makati City, Metro Manila</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li><li>Oil Change</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">Open 24 Hours</span>
+              <a href="tel:+6328XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="ncr" data-name="pasig ortigas">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">NCR</span>
+              <h3 class="station-card__name">Ortigas Ave., Pasig</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; 789 Ortigas Avenue, Pasig City, Metro Manila</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">6:00 AM – 10:00 PM</span>
+              <a href="tel:+6328XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="ncr" data-name="manila taft">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">NCR</span>
+              <h3 class="station-card__name">Taft Ave., Manila</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; 321 Taft Avenue, Manila City, Metro Manila</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Diesel</li><li>Car Wash</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">Open 24 Hours</span>
+              <a href="tel:+6328XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="ncr" data-name="paranaque airport">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">NCR</span>
+              <h3 class="station-card__name">Airport Rd., Parañaque</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; Airport Road, Parañaque City, Metro Manila</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li><li>Tire Inflation</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">Open 24 Hours</span>
+              <a href="tel:+6328XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <!-- ── LUZON ── -->
+          <article class="station-card" data-region="luzon" data-name="pampanga angeles">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Luzon</span>
+              <h3 class="station-card__name">MacArthur Hwy., Pampanga</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; MacArthur Highway, Angeles City, Pampanga</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li><li>Oil Change</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">5:00 AM – 11:00 PM</span>
+              <a href="tel:+6345XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="luzon" data-name="batangas lipa">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Luzon</span>
+              <h3 class="station-card__name">STAR Tollway, Lipa City</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; STAR Tollway, Lipa City, Batangas</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Diesel</li><li>Car Wash</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">Open 24 Hours</span>
+              <a href="tel:+6343XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="luzon" data-name="cavite bacoor">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Luzon</span>
+              <h3 class="station-card__name">Aguinaldo Hwy., Bacoor</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; Aguinaldo Highway, Bacoor City, Cavite</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">5:00 AM – 12:00 AM</span>
+              <a href="tel:+6346XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="luzon" data-name="laguna santa rosa">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Luzon</span>
+              <h3 class="station-card__name">SLEX, Santa Rosa</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; South Luzon Expressway, Santa Rosa City, Laguna</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li><li>Oil Change</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">Open 24 Hours</span>
+              <a href="tel:+6349XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="luzon" data-name="bulacan meycauayan">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Luzon</span>
+              <h3 class="station-card__name">NLEX, Meycauayan</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; North Luzon Expressway, Meycauayan, Bulacan</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Diesel</li><li>Tire Inflation</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">Open 24 Hours</span>
+              <a href="tel:+6344XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <!-- ── VISAYAS ── -->
+          <article class="station-card" data-region="visayas" data-name="cebu city colon">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Visayas</span>
+              <h3 class="station-card__name">N. Escario St., Cebu City</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; N. Escario Street, Cebu City, Cebu</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li><li>Car Wash</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">Open 24 Hours</span>
+              <a href="tel:+6332XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="visayas" data-name="cebu mandaue">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Visayas</span>
+              <h3 class="station-card__name">A.S. Fortuna St., Mandaue</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; A.S. Fortuna Street, Mandaue City, Cebu</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li><li>Oil Change</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">5:00 AM – 11:00 PM</span>
+              <a href="tel:+6332XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="visayas" data-name="iloilo city diversion">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Visayas</span>
+              <h3 class="station-card__name">Diversion Rd., Iloilo City</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; Diversion Road, Iloilo City, Iloilo</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Diesel</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">6:00 AM – 10:00 PM</span>
+              <a href="tel:+6333XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <!-- ── MINDANAO ── -->
+          <article class="station-card" data-region="mindanao" data-name="davao city">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Mindanao</span>
+              <h3 class="station-card__name">Quimpo Blvd., Davao City</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; Quimpo Boulevard, Davao City, Davao del Sur</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Premium</li><li>Diesel</li><li>Car Wash</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">Open 24 Hours</span>
+              <a href="tel:+6382XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="mindanao" data-name="cagayan de oro">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Mindanao</span>
+              <h3 class="station-card__name">Mortola St., Cagayan de Oro</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; Mortola Street, Cagayan de Oro City, Misamis Oriental</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Diesel</li><li>Oil Change</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">5:00 AM – 11:00 PM</span>
+              <a href="tel:+6388XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+          <article class="station-card" data-region="mindanao" data-name="general santos">
+            <div class="station-card__header">
+              <span class="station-card__region-badge">Mindanao</span>
+              <h3 class="station-card__name">National Hwy., Gen. Santos</h3>
+            </div>
+            <div class="station-card__body">
+              <p class="station-card__address">&#x1F4CD; National Highway, General Santos City, South Cotabato</p>
+              <ul class="station-card__services">
+                <li>Unleaded</li><li>Diesel</li>
+              </ul>
+            </div>
+            <div class="station-card__footer">
+              <span class="station-card__hours">6:00 AM – 10:00 PM</span>
+              <a href="tel:+6383XXXXXXX" class="station-card__phone">&#x260E; Call Station</a>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Empty state -->
+        <div class="locator-empty" id="locator-empty" hidden>
+          <p>&#x1F50D; No stations found for your search.</p>
+          <p style="margin-top: var(--space-2); font-size: var(--text-base);">Try a different city name or select a different region.</p>
+          <button id="btn-reset" class="btn btn--outline" style="margin-top: var(--space-5);">
+            Clear Filters
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ CTA BAND -->
+    <section class="section--red section--sm" aria-label="Call to action">
+      <div class="container flex-between cta-band__inner">
+        <div>
+          <h2 class="cta-band__title">Can't Find a Station Near You?</h2>
+          <p class="cta-band__desc">We're always expanding — contact us to request a station in your area.</p>
+        </div>
+        <a href="contact.html" class="btn btn--white btn--lg">Contact Us</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════ FOOTER -->
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="site-footer__top">
+      <div class="container">
+        <div class="site-footer__grid">
+          <div>
+            <span class="site-footer__logo-text">Flying V</span>
+            <p class="site-footer__tagline">Fueling the Philippines Forward — quality petroleum products at hundreds of stations nationwide.</p>
+            <div class="site-footer__socials">
+              <a href="#" class="social-link" aria-label="Facebook">FB</a>
+              <a href="#" class="social-link" aria-label="Twitter">TW</a>
+              <a href="#" class="social-link" aria-label="Instagram">IG</a>
+            </div>
+          </div>
+          <div>
+            <h3 class="site-footer__heading">Quick Links</h3>
+            <ul class="site-footer__links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="products.html">Products</a></li>
+              <li><a href="locations.html">Locations</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="site-footer__heading">Our Products</h3>
+            <ul class="site-footer__links">
+              <li><a href="products.html#fuels">Fuels</a></li>
+              <li><a href="products.html#lubricants">Lubricants</a></li>
+              <li><a href="products.html#auto-services">Auto Services</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="site-footer__heading">Contact Us</h3>
+            <address class="site-footer__address">
+              Flying V Petroleum Corp.<br>
+              Makati City, Metro Manila<br>
+              Philippines
+            </address>
+            <p class="site-footer__contact-item"><a href="tel:+6328XXXXXXX">+63 (2) 8XXX-XXXX</a></p>
+            <p class="site-footer__contact-item"><a href="mailto:info@flyingv.com.ph">info@flyingv.com.ph</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <div class="container">
+        <p class="site-footer__copy">&copy; <span id="footer-year"></span> Flying V Petroleum Corporation. All rights reserved.</p>
+        <div class="site-footer__legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
