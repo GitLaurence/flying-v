@@ -3,22 +3,24 @@
 fetch_stations.py — Query OpenStreetMap for all Flying V stations in the Philippines.
 
 Usage:
-    python3 fetch_stations.py                  # prints table + saves CSV + saves HTML snippet
-    python3 fetch_stations.py --csv            # CSV only
-    python3 fetch_stations.py --html           # HTML station cards only
-    python3 fetch_stations.py --json           # raw JSON only
+    python3 fetch_stations.py                        # table + CSV + HTML snippet
+    python3 fetch_stations.py --update-locations     # inject directly into locations.html
+    python3 fetch_stations.py --csv                  # CSV only
+    python3 fetch_stations.py --html                 # HTML snippet file only
+    python3 fetch_stations.py --json                 # raw JSON to stdout
 
-Requirements:
-    pip install requests
+No third-party dependencies — uses stdlib only.
 """
 
 import argparse
 import csv
 import json
+import os
+import re
 import sys
-import time
 import urllib.request
 import urllib.parse
+from datetime import datetime, timezone
 
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 
@@ -42,7 +44,7 @@ REGION_MAP = {
     "Muntinlupa": "ncr", "Navotas": "ncr", "Parañaque": "ncr", "Pasay": "ncr",
     "Pasig": "ncr", "Pateros": "ncr", "San Juan": "ncr", "Taguig": "ncr",
     "Valenzuela": "ncr",
-    # Luzon provinces / cities (non-exhaustive — add more as needed)
+    # Luzon
     "Batangas": "luzon", "Laguna": "luzon", "Cavite": "luzon", "Rizal": "luzon",
     "Bulacan": "luzon", "Pampanga": "luzon", "Tarlac": "luzon", "Zambales": "luzon",
     "Nueva Ecija": "luzon", "Bataan": "luzon", "Aurora": "luzon",
@@ -69,7 +71,7 @@ REGION_MAP = {
     "Digos": "mindanao", "Koronadal": "mindanao",
 }
 
-SERVICE_ICONS = {
+SERVICE_LABELS = {
     "car_wash": "Car Wash",
     "oil_change": "Oil Change",
     "air": "Tire Inflation",
@@ -78,6 +80,15 @@ SERVICE_ICONS = {
     "shop": "Convenience Store",
 }
 
+REGION_LABELS = {
+    "ncr": "NCR",
+    "luzon": "Luzon",
+    "visayas": "Visayas",
+    "mindanao": "Mindanao",
+}
+
+
+# ── helpers ──────────────────────────────────────────────────────────────────
 
 def guess_region(tags):
     for field in ("addr:city", "addr:municipality", "addr:province", "addr:region"):
@@ -85,76 +96,74 @@ def guess_region(tags):
         for key, region in REGION_MAP.items():
             if key.lower() in val.lower():
                 return region
-    return "luzon"  # default fallback
+    return "luzon"
 
 
 def build_address(tags):
-    parts = [
-        tags.get("addr:housenumber", ""),
-        tags.get("addr:street", ""),
-        tags.get("addr:barangay", ""),
-        tags.get("addr:suburb", ""),
-        tags.get("addr:city", tags.get("addr:municipality", "")),
-        tags.get("addr:province", ""),
-    ]
     addr = tags.get("addr:full", "")
     if not addr:
+        parts = [
+            tags.get("addr:housenumber", ""),
+            tags.get("addr:street", ""),
+            tags.get("addr:barangay", ""),
+            tags.get("addr:suburb", ""),
+            tags.get("addr:city", tags.get("addr:municipality", "")),
+            tags.get("addr:province", ""),
+        ]
         addr = ", ".join(p for p in parts if p)
     return addr or "Philippines"
 
 
 def get_services(tags):
     services = []
-    # OSM fuel types
     for fuel in ("fuel:octane_91", "fuel:octane_95", "fuel:diesel"):
         if tags.get(fuel) == "yes":
-            label = fuel.replace("fuel:octane_", "RON ").replace("fuel:", "").replace("diesel", "Diesel")
+            label = fuel.replace("fuel:octane_", "RON ").replace("fuel:diesel", "Diesel")
             services.append(label)
-    # Other amenities
-    for osm_key, label in SERVICE_ICONS.items():
+    for osm_key, label in SERVICE_LABELS.items():
         if tags.get(osm_key) == "yes" or tags.get("service:" + osm_key) == "yes":
             services.append(label)
-    if not services:
-        services = ["Gasoline", "Diesel"]
-    return services
+    return services or ["Gasoline", "Diesel"]
 
+
+# ── fetch ─────────────────────────────────────────────────────────────────────
 
 def fetch_stations():
     print("Querying OpenStreetMap Overpass API…", file=sys.stderr)
     data = urllib.parse.urlencode({"data": QUERY}).encode()
-    req = urllib.request.Request(OVERPASS_URL, data=data,
-                                  headers={"Content-Type": "application/x-www-form-urlencoded",
-                                           "User-Agent": "FlyingVStationFetcher/1.0"})
+    req = urllib.request.Request(
+        OVERPASS_URL, data=data,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": "FlyingVStationFetcher/1.0 (flyingv.com.ph)",
+        }
+    )
     with urllib.request.urlopen(req, timeout=120) as resp:
         raw = json.load(resp)
 
     elements = raw.get("elements", [])
-    print(f"Found {len(elements)} elements.", file=sys.stderr)
+    print(f"OSM returned {len(elements)} elements.", file=sys.stderr)
 
     stations = []
     seen = set()
 
     for el in elements:
         tags = el.get("tags", {})
-        name = tags.get("name") or tags.get("brand") or "Flying V"
+        name = (tags.get("name") or tags.get("brand") or "Flying V").strip()
 
-        # Deduplicate by coordinates (ways include a `center` key)
         lat = el.get("lat") or el.get("center", {}).get("lat")
         lon = el.get("lon") or el.get("center", {}).get("lon")
-        key = (round(float(lat), 4), round(float(lon), 4)) if lat and lon else name
-        if key in seen:
+        coord_key = (round(float(lat), 4), round(float(lon), 4)) if lat and lon else name
+        if coord_key in seen:
             continue
-        seen.add(key)
+        seen.add(coord_key)
 
-        city = tags.get("addr:city") or tags.get("addr:municipality") or tags.get("addr:province", "")
-        province = tags.get("addr:province", "")
         region = guess_region(tags)
-
         stations.append({
-            "name": name.strip(),
+            "name": name,
             "address": build_address(tags),
-            "city": city,
-            "province": province,
+            "city": tags.get("addr:city") or tags.get("addr:municipality") or "",
+            "province": tags.get("addr:province", ""),
             "region": region,
             "services": get_services(tags),
             "hours": tags.get("opening_hours", ""),
@@ -165,8 +174,11 @@ def fetch_stations():
         })
 
     stations.sort(key=lambda s: (s["region"], s["city"], s["name"]))
+    print(f"Deduplicated to {len(stations)} unique stations.", file=sys.stderr)
     return stations
 
+
+# ── output formatters ─────────────────────────────────────────────────────────
 
 def print_table(stations):
     print(f"\n{'#':<4} {'Name':<35} {'Address':<50} {'City':<20} {'Region':<10}")
@@ -176,18 +188,19 @@ def print_table(stations):
     print(f"\nTotal: {len(stations)} stations")
 
 
-def write_csv(stations, path="flying_v_stations.csv"):
+def write_csv(stations, path="scripts/flying_v_stations.csv"):
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "name", "address", "city", "province", "region",
-            "services", "hours", "phone", "lat", "lon", "osm_id"
+            "services", "hours", "phone", "lat", "lon", "osm_id",
         ])
         writer.writeheader()
         for s in stations:
             row = dict(s)
             row["services"] = ", ".join(s["services"])
             writer.writerow(row)
-    print(f"CSV saved to {path}", file=sys.stderr)
+    print(f"CSV saved → {path}", file=sys.stderr)
 
 
 def station_card_html(s):
@@ -195,51 +208,89 @@ def station_card_html(s):
         f'<span class="station-card__service">{svc}</span>'
         for svc in s["services"]
     )
-    hours_html = f'<p class="station-card__hours">&#x1F552; {s["hours"]}</p>' if s["hours"] else ""
-    phone_html = (f'<p class="station-card__phone">'
-                  f'<a href="tel:{s["phone"]}">{s["phone"]}</a></p>') if s["phone"] else ""
+    hours_part = (
+        f'\n              <span class="station-card__hours">&#x1F552; {s["hours"]}</span>'
+        if s["hours"] else ""
+    )
+    phone_part = (
+        f'\n              <a href="tel:{s["phone"]}" class="station-card__phone">&#x260E; {s["phone"]}</a>'
+        if s["phone"] else ""
+    )
+    region_label = REGION_LABELS.get(s["region"], s["region"].upper())
 
-    return f"""
-          <article class="station-card" data-region="{s['region']}">
-            <div class="station-card__header">
-              <h3 class="station-card__name">{s['name']}</h3>
-              <span class="station-card__region-badge">{s['region'].upper()}</span>
-            </div>
-            <div class="station-card__body">
-              <p class="station-card__address">&#x1F4CD; {s['address']}</p>
-              {hours_html}
-              {phone_html}
-              <div class="station-card__services">{services_html}</div>
-            </div>
-          </article>"""
+    return (
+        f'          <article class="station-card" data-region="{s["region"]}">\n'
+        f'            <div class="station-card__header">\n'
+        f'              <span class="station-card__region-badge">{region_label}</span>\n'
+        f'              <h3 class="station-card__name">{s["name"]}</h3>\n'
+        f'            </div>\n'
+        f'            <div class="station-card__body">\n'
+        f'              <p class="station-card__address">&#x1F4CD; {s["address"]}</p>\n'
+        f'              <div class="station-card__services">{services_html}</div>\n'
+        f'            </div>\n'
+        f'            <div class="station-card__footer">{hours_part}{phone_part}\n'
+        f'            </div>\n'
+        f'          </article>'
+    )
 
 
-def write_html(stations, path="station_cards.html"):
-    ncr = [s for s in stations if s["region"] == "ncr"]
-    luzon = [s for s in stations if s["region"] == "luzon"]
-    visayas = [s for s in stations if s["region"] == "visayas"]
-    mindanao = [s for s in stations if s["region"] == "mindanao"]
+def build_grid_html(stations):
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    groups = {r: [s for s in stations if s["region"] == r]
+              for r in ("ncr", "luzon", "visayas", "mindanao")}
 
-    lines = [
-        f"<!-- AUTO-GENERATED: {len(stations)} Flying V stations from OpenStreetMap -->",
-        f'<div class="station-grid" id="station-grid">',
-    ]
-    for group, label in [(ncr, "NCR"), (luzon, "Luzon"), (visayas, "Visayas"), (mindanao, "Mindanao")]:
-        if group:
-            lines.append(f"\n          <!-- ── {label} ({len(group)} stations) ── -->")
-            lines.extend(station_card_html(s) for s in group)
-    lines.append("\n        </div>")
+    lines = [f"          <!-- STATIONS:START — {len(stations)} stations, fetched {timestamp} -->"]
+    for region, label in [("ncr", "NCR — Metro Manila"), ("luzon", "Luzon"),
+                           ("visayas", "Visayas"), ("mindanao", "Mindanao")]:
+        grp = groups[region]
+        if not grp:
+            continue
+        lines.append(f"\n          <!-- ── {label} ({len(grp)}) ── -->")
+        lines.extend(station_card_html(s) for s in grp)
+    lines.append("          <!-- STATIONS:END -->")
+    return "\n".join(lines)
+
+
+def write_html_snippet(stations, path="scripts/station_cards.html"):
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(build_grid_html(stations))
+    print(f"HTML snippet saved → {path}", file=sys.stderr)
+
+
+def update_locations_html(stations, path="locations.html"):
+    with open(path, encoding="utf-8") as f:
+        content = f.read()
+
+    new_block = build_grid_html(stations)
+    updated, count = re.subn(
+        r"<!-- STATIONS:START -->.*?<!-- STATIONS:END -->",
+        new_block,
+        content,
+        flags=re.DOTALL,
+    )
+    if count == 0:
+        print(
+            f"ERROR: Could not find <!-- STATIONS:START --> … <!-- STATIONS:END --> markers in {path}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
-    print(f"HTML snippet saved to {path}", file=sys.stderr)
-    print(f"Paste the contents of {path} into the <div id='station-grid'> in locations.html", file=sys.stderr)
+        f.write(updated)
+    print(f"locations.html updated with {len(stations)} stations.", file=sys.stderr)
 
+
+# ── main ──────────────────────────────────────────────────────────────────────
 
 def main():
     parser = argparse.ArgumentParser(description="Fetch Flying V stations from OpenStreetMap")
-    parser.add_argument("--csv",  action="store_true", help="Save CSV")
-    parser.add_argument("--html", action="store_true", help="Save HTML station card snippet")
+    parser.add_argument("--update-locations", action="store_true",
+                        help="Inject station cards directly into locations.html")
+    parser.add_argument("--locations-path", default="locations.html",
+                        help="Path to locations.html (default: locations.html)")
+    parser.add_argument("--csv",  action="store_true", help="Save CSV to scripts/flying_v_stations.csv")
+    parser.add_argument("--html", action="store_true", help="Save HTML snippet to scripts/station_cards.html")
     parser.add_argument("--json", action="store_true", help="Print raw JSON to stdout")
     args = parser.parse_args()
 
@@ -249,16 +300,15 @@ def main():
         print(json.dumps(stations, indent=2, ensure_ascii=False))
         return
 
-    if not args.csv and not args.html:
-        # Default: print table + save both files
-        print_table(stations)
+    if args.update_locations:
+        update_locations_html(stations, args.locations_path)
         write_csv(stations)
-        write_html(stations)
-    else:
-        if args.csv:
-            write_csv(stations)
-        if args.html:
-            write_html(stations)
+        return
+
+    # Default: table + both output files
+    print_table(stations)
+    write_csv(stations)
+    write_html_snippet(stations)
 
 
 if __name__ == "__main__":
