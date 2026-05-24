@@ -296,7 +296,7 @@ def update_locations_html(stations, path="locations.html"):
 
     new_block = build_grid_html(stations)
     updated, count = re.subn(
-        r"<!-- STATIONS:START -->.*?<!-- STATIONS:END -->",
+        r"<!-- STATIONS:START.*?-->.*?<!-- STATIONS:END -->",
         new_block,
         content,
         flags=re.DOTALL,
