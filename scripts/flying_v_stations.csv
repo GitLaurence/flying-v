@@ -92,7 +92,6 @@ Flying V – Santa Maria - Tungkong Mangga Road,Santa Maria - Tungkong Mangga Ro
 Flying V – Sarangani-Davao del Sur Coastal Road,Sarangani-Davao del Sur Coastal Road,,,luzon,"Gasoline, Diesel",,,5.8187694,125.21061,osm,way/737545259
 Flying V – Sumulong Highway,Sumulong Highway,,,luzon,"Gasoline, Diesel",,,14.6177138,121.1338681,osm,way/909582526
 Flying V – Surigao - Davao Coastal Road,Surigao - Davao Coastal Road,,,luzon,"RON 91, RON 95, Diesel",,,7.5789326,126.5565472,osm,way/178426056
-Flying V – Surigao — Davao Coastal Road,Surigao — Davao Coastal Road,,,luzon,"Gasoline, Diesel",,,6.8828043,126.0872557,osm,way/1193688244
 Flying V – Surigao-Davao Coastal Road,Surigao-Davao Coastal Road,,,luzon,"Gasoline, Diesel",,,7.1334926,125.8947404,osm,way/971860137
 Flying V – Susano Road,Susano Road,,,luzon,"Gasoline, Diesel",,,14.7341815,121.0344092,osm,way/796694448
 Flying V – Tagum - Panabo Circumferential Highway,Tagum - Panabo Circumferential Highway,,,luzon,"Gasoline, Diesel",,,7.5821256,125.7074545,osm,way/180934889
@@ -107,7 +106,7 @@ Flying V – Baao,Baao,Baao,,luzon,"Gasoline, Diesel",,,13.4568885,123.3648592,o
 "Flying V – Manila North Road, Bacarra","Manila North Road, Bacarra, Ilocos Norte",Bacarra,Ilocos Norte,luzon,"Gasoline, Diesel",,,18.2883117,120.6000482,osm,node/1236189462
 Flying V – Bacoor,"Bacoor, Cavite",Bacoor,Cavite,luzon,"Gasoline, Diesel",,,14.4058092,120.97784,osm,way/182804109
 "Flying V – Bacoor Boulevard, Bacoor","Bacoor Boulevard, Bacoor",Bacoor,,luzon,"Gasoline, Diesel",,,14.4260546,120.964446,osm,way/1423925500
-"Flying V – General Evangelista Street, Bacoor","General Evangelista Street, Bacoor, Cavite",Bacoor,Cavite,luzon,"Gasoline, Diesel",,,14.4600855,120.9487616,osm,way/180161950
+"Flying V – General Evangelista Street, Bacoor","General Evangelista Street, Bacoor, Cavite",Bacoor,Cavite,luzon,"Gasoline, Diesel",,,14.4600868,120.9487284,osm,way/414289367
 "Flying V – Mambog Road, Bacoor","Mambog Road, Bacoor, Cavite",Bacoor,Cavite,luzon,"Gasoline, Diesel",,,14.4241872,120.9501454,osm,way/759959307
 "Flying V – Marcos Avenue, Batac","Marcos Avenue, Batac",Batac,,luzon,"Gasoline, Diesel",24/7,,18.0547444,120.5623514,osm,node/1232828179
 "Flying V – Lawa Road, Calamba","Lawa Road, Calamba",Calamba,,luzon,"Gasoline, Diesel",,,14.202403,121.1425401,osm,way/406776420
@@ -118,7 +117,7 @@ Flying V – Guagua,"Guagua, Pampanga",Guagua,Pampanga,luzon,"Gasoline, Diesel",
 "Flying V – Guagua Old National Highway, Guagua","Guagua Old National Highway, Guagua, Pampanga",Guagua,Pampanga,luzon,"Gasoline, Diesel",05:00-21:00,,14.9682299,120.6336746,osm,way/338729147
 "Flying V – Guagua-Floridablanca Road, Guagua","Guagua-Floridablanca Road, Guagua, Pampanga",Guagua,Pampanga,luzon,"Gasoline, Diesel",,,14.9705815,120.6032987,osm,way/780413658
 "Flying V – General J. Castañeda Street, Imus","General J. Castañeda Street, Poblacion IV-B, Imus, Cavite",Imus,Cavite,luzon,"Gasoline, Diesel",,,14.4279553,120.9338172,osm,relation/14240410
-"Flying V – Tirona Highway, Kawit","Tirona Highway, Kawit",Kawit,,luzon,"Gasoline, Diesel",,,14.4489825,120.9196361,osm,way/109740411
+"Flying V – Tirona Highway, Kawit","Tirona Highway, Kawit",Kawit,,luzon,"Gasoline, Diesel",,,14.4489563,120.9196488,osm,way/1135465139
 "Flying V – Marcos Highway, La Union","Marcos Highway, La Union",La Union,,luzon,"Gasoline, Diesel",,,16.3193302,120.4702084,osm,way/942945020
 "Flying V – Airport Avenue, Laoag","Airport Avenue, Laoag",Laoag,,luzon,"Gasoline, Diesel",,,18.1877223,120.5789125,osm,node/418172434
 "Flying V – Diokno Highway, Lemery","Diokno Highway, Lemery",Lemery,,luzon,"Gasoline, Diesel",,,13.9847999,120.8901862,osm,way/416518574
@@ -156,6 +155,7 @@ Gasoline Station,"Rosario Street, San Enrique",San Enrique,,luzon,"Gasoline, Die
 "Flying V – Davao-Agusan National Highway, Panabo City","Davao-Agusan National Highway, Panabo City, Davao del Norte",Panabo City,Davao del Norte,mindanao,"RON 91, RON 95, Diesel",,,7.3046121,125.6827144,osm,way/145079339
 "Flying V – National Highway, Panabo City","National Highway, San Francisco, Panabo City, Davao del Norte",Panabo City,Davao del Norte,mindanao,"Gasoline, Diesel",,,7.3067021,125.6828012,osm,way/144959449
 "Flying V – Tagum-Panabo Circumferential Road, Panabo City","Tagum-Panabo Circumferential Road, Panabo City, Davao del Norte",Panabo City,Davao del Norte,mindanao,"Gasoline, Diesel",,,7.3318088,125.6619582,osm,way/314525184
+"Flying V – President Diosdado P. Macapagal Highway, San Isidro","President Diosdado P. Macapagal Highway, San Roque, San Isidro, Davao Oriental",San Isidro,Davao Oriental,mindanao,"Gasoline, Diesel",,,6.8828043,126.0872557,osm,way/1193688244
 "Flying V – Inawayan, Santa Cruz","Inawayan, Santa Cruz, Davao del Sur",Santa Cruz,Davao del Sur,mindanao,"Gasoline, Diesel",,,6.9524746,125.4707389,osm,way/1161625346
 "Flying V – San Isidro-Katipunan Road, Santo Niño","San Isidro-Katipunan Road, Santo Niño, South Cotabato",Santo Niño,South Cotabato,mindanao,"Gasoline, Diesel",,,6.4396653,124.6729272,osm,node/12765570101
 "Flying V – Digos-Makar Road, Sulop","Digos-Makar Road, Kiblagon, Sulop, Davao del Sur",Sulop,Davao del Sur,mindanao,"Gasoline, Diesel",,,6.5835867,125.3537798,osm,way/775662244
