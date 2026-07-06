@@ -5,6 +5,7 @@ Flying V – A. del Rosario Street,A. del Rosario Street,,,luzon,"Gasoline, Dies
 Flying V – Aklan West Road,Aklan West Road,,,luzon,"Gasoline, Diesel",,,11.9306188,121.9520373,osm,way/804577421
 Flying V – Antique-Aklan Road,Antique-Aklan Road,,,luzon,"Gasoline, Diesel",,,11.4778253,122.0759046,osm,way/498878398
 Flying V – Antique-Aklan Road,Antique-Aklan Road,,,luzon,"Gasoline, Diesel",,,11.2311034,122.0570553,osm,way/1394069163
+Flying V – Antonio A. Cosin Highway,Antonio A. Cosin Highway,,,luzon,"Gasoline, Diesel",,,8.5369567,124.7540431,osm,way/1054319766
 Flying V – Apalit-Macabebe Road,Apalit-Macabebe Road,,,luzon,"Gasoline, Diesel",,,14.9437846,120.7424248,osm,relation/19179043
 Flying V – Argonaut Highway,Argonaut Highway,,,luzon,"Gasoline, Diesel",,,14.8110695,120.2972849,osm,way/672149883
 Flying V – Aurora Boulevard,Aurora Boulevard,,,luzon,"Gasoline, Diesel",,,14.6251249,121.0580235,osm,way/263314302
@@ -15,9 +16,8 @@ Flying V – Barotac Nuevo-Dumangas-Dacutan Wharf Road,Barotac Nuevo-Dumangas-Da
 Flying V – Batangas,Batangas,,Batangas,luzon,"Gasoline, Diesel",,,14.0519498,120.9332286,osm,way/465133937
 Flying V – Benigno S. Aquino Avenue,Benigno S. Aquino Avenue,,,luzon,"Gasoline, Diesel",,,10.8285127,122.5262778,osm,way/170197129
 Flying V – Burgos Street,Burgos Street,,,luzon,"Gasoline, Diesel",,,10.6722282,122.9485045,osm,way/1387517983
-Flying V – Butuan – Cagayan de Oro – Iligan Road,Butuan – Cagayan de Oro – Iligan Road,,,luzon,"Gasoline, Diesel",,,8.5850566,124.7706364,osm,way/1054616594
+Flying V – Butuan-Cagayan de Oro-Iligan Road,Butuan-Cagayan de Oro-Iligan Road,,,luzon,"Gasoline, Diesel",,,8.5850566,124.7706364,osm,way/1054616594
 Flying V – Cagayan Valley Road,Cagayan Valley Road,,,luzon,"Gasoline, Diesel",,,15.1941676,120.9586223,osm,way/812691272
-Flying V – Cagayan-Gingoog-Butuan National Highway,Cagayan-Gingoog-Butuan National Highway,,,luzon,"Gasoline, Diesel",,,8.5369567,124.7540431,osm,way/1054319766
 Flying V – Calapan South Road,Calapan South Road,,,luzon,"Gasoline, Diesel",,,13.0252379,121.4799349,osm,way/1424743792
 Flying V – Camalig Road,Camalig Road,,,luzon,"Gasoline, Diesel",,,14.7675075,121.0071656,osm,way/810660939
 Flying V – Cansaga - Tayud Road,Cansaga - Tayud Road,,,luzon,"Gasoline, Diesel",,,10.3678516,123.9860089,osm,way/1249362267
@@ -112,7 +112,7 @@ Flying V – Bacoor,"Bacoor, Cavite",Bacoor,Cavite,luzon,"Gasoline, Diesel",,,14
 "Flying V – Lawa Road, Calamba","Lawa Road, Calamba",Calamba,,luzon,"Gasoline, Diesel",,,14.202403,121.1425401,osm,way/406776420
 "Flying V – Natalio Bacalso Avenue, Carcar","Natalio Bacalso Avenue, Carcar",Carcar,,luzon,"Gasoline, Diesel",,,10.1067648,123.6442631,osm,way/655982333
 "Flying V – Cebu North Road, Catmon","Cebu North Road, Catmon",Catmon,,luzon,"Gasoline, Diesel",,,10.7277876,124.0138889,osm,way/634861550
-"Flying V – Paliparan Road, Dasmarinas","Paliparan Road, Dasmarinas",Dasmarinas,,luzon,"Gasoline, Diesel",,,14.3201406,120.9847792,osm,way/1424405714
+"Flying V – Paliparan Road, Dasmariñas City","Paliparan Road, Dasmariñas City, Cavite",Dasmariñas City,Cavite,luzon,"Gasoline, Diesel",,,14.3201406,120.9847792,osm,way/1424405714
 Flying V – Guagua,"Guagua, Pampanga",Guagua,Pampanga,luzon,"Gasoline, Diesel",04:00-20:00,,14.9694778,120.6206164,osm,way/889072465
 "Flying V – Guagua Old National Highway, Guagua","Guagua Old National Highway, Guagua, Pampanga",Guagua,Pampanga,luzon,"Gasoline, Diesel",05:00-21:00,,14.9682299,120.6336746,osm,way/338729147
 "Flying V – Guagua-Floridablanca Road, Guagua","Guagua-Floridablanca Road, Guagua, Pampanga",Guagua,Pampanga,luzon,"Gasoline, Diesel",,,14.9705815,120.6032987,osm,way/780413658
