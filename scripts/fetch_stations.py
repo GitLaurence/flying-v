@@ -97,6 +97,8 @@ REGION_MAP = {
     "Lucena": "luzon", "Lipa": "luzon", "Antipolo": "luzon",
     "Biñan": "luzon", "Santa Rosa": "luzon", "Calamba": "luzon",
     "Bacoor": "luzon", "Dasmariñas": "luzon", "Imus": "luzon",
+    "Quezon": "luzon", "Marinduque": "luzon", "Occidental Mindoro": "luzon",
+    "Oriental Mindoro": "luzon", "Palawan": "luzon", "Romblon": "luzon",
     # Visayas
     "Cebu": "visayas", "Cebu City": "visayas", "Mandaue": "visayas",
     "Lapu-Lapu": "visayas", "Talisay": "visayas", "Liloan": "visayas",
@@ -104,8 +106,13 @@ REGION_MAP = {
     "Tacloban": "visayas", "Ormoc": "visayas", "Palo": "visayas",
     "Bohol": "visayas", "Tagbilaran": "visayas",
     "Negros Occidental": "visayas", "Negros Oriental": "visayas",
-    "Leyte": "visayas", "Eastern Samar": "visayas", "Western Samar": "visayas",
+    "Southern Leyte": "visayas", "Leyte": "visayas",
+    "Eastern Samar": "visayas", "Western Samar": "visayas",
     "Roxas City": "visayas", "Kabankalan": "visayas",
+    "Capiz": "visayas", "Aklan": "visayas", "Antique": "visayas",
+    "Guimaras": "visayas", "Siquijor": "visayas",
+    "Carcar": "visayas", "Catmon": "visayas", "Maasin": "visayas",
+    "Oton": "visayas", "San Enrique": "visayas", "Ayungon": "visayas",
     # Mindanao
     "Davao": "mindanao", "Davao City": "mindanao",
     "Cagayan de Oro": "mindanao", "Iligan": "mindanao",
@@ -116,7 +123,24 @@ REGION_MAP = {
     "Kidapawan": "mindanao", "Pagadian": "mindanao",
     "Dipolog": "mindanao", "Ozamiz": "mindanao",
     "Mati": "mindanao", "Bislig": "mindanao",
+    "Bukidnon": "mindanao", "Malaybalay": "mindanao", "Valencia City": "mindanao",
+    "Misamis Oriental": "mindanao", "Misamis Occidental": "mindanao",
+    "Lanao del Norte": "mindanao", "Lanao del Sur": "mindanao",
+    "Zamboanga del Norte": "mindanao", "Zamboanga del Sur": "mindanao",
+    "Sultan Kudarat": "mindanao", "South Cotabato": "mindanao", "Sarangani": "mindanao",
+    "Agusan del Norte": "mindanao", "Agusan del Sur": "mindanao",
+    "Surigao del Norte": "mindanao", "Surigao del Sur": "mindanao",
+    "Davao del Sur": "mindanao", "Davao del Norte": "mindanao",
+    "Davao Oriental": "mindanao", "Davao Occidental": "mindanao",
+    "Davao de Oro": "mindanao",
+    "Basilan": "mindanao", "Sulu": "mindanao", "Tawi-Tawi": "mindanao",
 }
+
+# Longest key first, so e.g. "Quezon City" (ncr) is checked before the more
+# generic "Quezon" (luzon province), and "Southern Leyte" (visayas) before
+# "San Juan" (ncr) — plain dict order previously let the first *any* substring
+# hit win, which meant short/generic keys silently shadowed more specific ones.
+REGION_MAP_BY_SPECIFICITY = sorted(REGION_MAP.items(), key=lambda kv: -len(kv[0]))
 
 OSM_SERVICE_TAGS = {
     "car_wash": "Car Wash",
@@ -141,19 +165,20 @@ GENERIC_NAMES = {"flying v", "flying-v", "flyingv", "flying v gasoline station",
 
 def guess_region(text):
     t = text.lower()
-    for key, region in REGION_MAP.items():
+    for key, region in REGION_MAP_BY_SPECIFICITY:
         if key.lower() in t:
             return region
     return "luzon"
 
 
 def make_display_name(raw_name, street="", barangay="", city="", province=""):
-    """Give generic 'Flying V' entries a location-based title."""
+    """Give generic/unbranded entries (e.g. a raw OSM name like 'Gasoline
+    Station' that carries no 'Flying V' branding) a location-based title."""
     normalized = re.sub(
         r'\s+(gas(oline)?\s+)?station\s*$', '', raw_name, flags=re.IGNORECASE
     ).strip()
 
-    if normalized.lower() not in GENERIC_NAMES:
+    if normalized.lower() not in GENERIC_NAMES and "flying v" in normalized.lower():
         return raw_name
 
     location = city or province
@@ -249,7 +274,17 @@ def fetch_osm():
         barangay = tags.get("addr:barangay", "")
         city     = tags.get("addr:city") or tags.get("addr:municipality") or ""
         province = tags.get("addr:province", "")
-        raw_name = (tags.get("name") or tags.get("brand") or "Flying V").strip()
+        # Prefer whichever of name/brand actually carries the "Flying V"
+        # branding — some OSM nodes have a generic name (e.g. "Gasoline
+        # Station") but a correctly branded `brand` tag, or vice versa.
+        name_tag, brand_tag = tags.get("name", ""), tags.get("brand", "")
+        if "flying" in name_tag.lower():
+            raw_name = name_tag
+        elif "flying" in brand_tag.lower():
+            raw_name = brand_tag
+        else:
+            raw_name = name_tag or brand_tag or "Flying V"
+        raw_name = raw_name.strip()
 
         stations.append({
             "name":     make_display_name(raw_name, street, barangay, city, province),

@@ -1,6 +1,21 @@
 (function () {
   'use strict';
 
+  // Coalesce a scroll handler to at most once per animation frame, so
+  // layout-reading handlers (getBoundingClientRect, offsetHeight, …) don't
+  // run on every native scroll tick.
+  function rafThrottle(fn) {
+    var ticking = false;
+    return function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        fn();
+        ticking = false;
+      });
+    };
+  }
+
   // ─── 1. STICKY HEADER ────────────────────────────────────────────────────────
   function initStickyHeader() {
     var header = document.getElementById('site-header');
@@ -18,7 +33,7 @@
     }
 
     if (isHomePage) header.classList.add('is-transparent');
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onScroll), { passive: true });
     onScroll();
   }
 
@@ -29,10 +44,20 @@
     if (!hamburger || !nav) return;
 
     function setOpen(open) {
+      var wasOpen = hamburger.classList.contains('is-open');
       hamburger.classList.toggle('is-open', open);
       nav.classList.toggle('is-open', open);
       hamburger.setAttribute('aria-expanded', String(open));
       document.body.style.overflow = open ? 'hidden' : '';
+
+      if (open) {
+        var firstLink = nav.querySelector('.site-nav__link');
+        if (firstLink) firstLink.focus();
+      } else if (wasOpen && nav.contains(document.activeElement)) {
+        // Only steal focus back if it was inside the panel we're closing —
+        // avoids yanking focus on e.g. the >=768px resize auto-close.
+        hamburger.focus();
+      }
     }
 
     hamburger.addEventListener('click', function () {
@@ -52,7 +77,21 @@
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') { setOpen(false); return; }
+
+      if (e.key === 'Tab' && hamburger.classList.contains('is-open')) {
+        var focusable = nav.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (!focusable.length) return;
+        var first = focusable[0];
+        var last  = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     });
 
     window.addEventListener('resize', function () {
@@ -264,7 +303,7 @@
       });
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', rafThrottle(onScroll), { passive: true });
     onScroll();
   }
 

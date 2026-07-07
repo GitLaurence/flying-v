@@ -55,8 +55,7 @@ flying-v/
 ├── js/
 │   └── main.js           # Navigation, form validation, station filter, scroll effects
 ├── assets/
-│   ├── images/           # Hero images and station photos
-│   └── icons/            # SVG icons
+│   └── images/           # Logo and hero/station imagery
 └── README.md
 ```
 
