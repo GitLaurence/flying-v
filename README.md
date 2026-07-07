@@ -9,6 +9,7 @@ Official website for **Flying V Petroleum Corporation** (flyingv.com.ph), a Phil
 - **Vanilla JavaScript** — ES5-compatible, no frameworks, no build tools
 - **Google Fonts** — Inter (400–800 weight) via `<link>`
 - **Zero dependencies** — open any `.html` file directly in a browser
+- **SEO-ready** — per-page canonical URLs, Open Graph/Twitter meta, `robots.txt`, `sitemap.xml`, custom `404.html`
 
 ## Pages
 
@@ -19,6 +20,7 @@ Official website for **Flying V Petroleum Corporation** (flyingv.com.ph), a Phil
 | `products.html` | Fuels (RON 91, RON 95+, Diesel), lubricants, auto services |
 | `locations.html` | Station locator with live region & keyword filter |
 | `contact.html` | Contact form with validation, office info, business hours |
+| `404.html` | Custom not-found page |
 
 ## Running Locally
 
@@ -45,6 +47,9 @@ flying-v/
 ├── products.html         # Fuel grades, lubricants, auto services
 ├── locations.html        # Station locator
 ├── contact.html          # Contact form + office info
+├── 404.html              # Custom not-found page
+├── robots.txt            # Search engine crawl rules
+├── sitemap.xml           # XML sitemap for search engines
 ├── css/
 │   └── styles.css        # All styles — design tokens, layout, components
 ├── js/
