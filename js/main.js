@@ -112,6 +112,9 @@
 
   // ─── 4. SMOOTH SCROLL ────────────────────────────────────────────────────────
   function initSmoothScroll() {
+    var reduceMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
       anchor.addEventListener('click', function (e) {
         var id = this.getAttribute('href');
@@ -122,7 +125,7 @@
         var header = document.getElementById('site-header');
         var offset = header ? header.offsetHeight : 0;
         var top = target.getBoundingClientRect().top + window.scrollY - offset - 16;
-        window.scrollTo({ top: top, behavior: 'smooth' });
+        window.scrollTo({ top: top, behavior: reduceMotion ? 'auto' : 'smooth' });
       });
     });
   }
