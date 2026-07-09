@@ -182,6 +182,7 @@
       var msg = f.check(f.el.value);
       if (f.err) f.err.textContent = msg;
       f.el.classList.toggle('is-invalid', !!msg);
+      f.el.setAttribute('aria-invalid', String(!!msg));
       return !msg;
     }
 
