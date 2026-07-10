@@ -153,6 +153,23 @@ button { font-family: inherit; }
   border-width: 0;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: var(--z-overlay);
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-md);
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: var(--space-4);
+}
+
 /* ============================================================
    TYPOGRAPHY COMPONENTS
    ============================================================ */
