@@ -448,6 +448,11 @@ def station_card_html(s):
         if s["phone"] else ""
     )
     region_label = REGION_LABELS.get(s["region"], s["region"].upper())
+    footer_html = (
+        f'            <div class="station-card__footer">{hours_part}{phone_part}\n'
+        f'            </div>\n'
+        if s["hours"] or s["phone"] else ""
+    )
     return (
         f'          <article class="station-card" data-region="{s["region"]}">\n'
         f'            <div class="station-card__header">\n'
@@ -458,8 +463,7 @@ def station_card_html(s):
         f'              <p class="station-card__address">&#x1F4CD; {s["address"]}</p>\n'
         f'              <div class="station-card__services">{services_html}</div>\n'
         f'            </div>\n'
-        f'            <div class="station-card__footer">{hours_part}{phone_part}\n'
-        f'            </div>\n'
+        f'{footer_html}'
         f'          </article>'
     )
 
