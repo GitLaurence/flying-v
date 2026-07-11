@@ -2,29 +2,29 @@ name,address,city,province,region,services,hours,phone,lat,lon,source,osm_id
 Flying V – 18 de Julio Street,18 de Julio Street,,,luzon,"Gasoline, Diesel",,,10.2432134,123.7964429,osm,way/1154274617
 "Flying V – A. Soriano, Jr. Avenue","A. Soriano, Jr. Avenue",,,luzon,"Gasoline, Diesel",,,10.3079509,123.9111081,osm,way/315562321
 Flying V – A. del Rosario Street,A. del Rosario Street,,,luzon,"Gasoline, Diesel",,,10.3295582,123.9395603,osm,way/904347676
-Flying V – Aklan West Road,Aklan West Road,,,luzon,"Gasoline, Diesel",,,11.9306188,121.9520373,osm,way/804577421
-Flying V – Antique-Aklan Road,Antique-Aklan Road,,,luzon,"Gasoline, Diesel",,,11.4778253,122.0759046,osm,way/498878398
-Flying V – Antique-Aklan Road,Antique-Aklan Road,,,luzon,"Gasoline, Diesel",,,11.2311034,122.0570553,osm,way/1394069163
+Flying V – Aklan West Road,Aklan West Road,,,visayas,"Gasoline, Diesel",,,11.9306188,121.9520373,osm,way/804577421
+Flying V – Antique-Aklan Road,Antique-Aklan Road,,,visayas,"Gasoline, Diesel",,,11.4778253,122.0759046,osm,way/498878398
+Flying V – Antique-Aklan Road,Antique-Aklan Road,,,visayas,"Gasoline, Diesel",,,11.2311034,122.0570553,osm,way/1394069163
 Flying V – Antonio A. Cosin Highway,Antonio A. Cosin Highway,,,luzon,"Gasoline, Diesel",,,8.5369567,124.7540431,osm,way/1054319766
 Flying V – Apalit-Macabebe Road,Apalit-Macabebe Road,,,luzon,"Gasoline, Diesel",,,14.9437846,120.7424248,osm,relation/19179043
 Flying V – Argonaut Highway,Argonaut Highway,,,luzon,"Gasoline, Diesel",,,14.8110695,120.2972849,osm,way/672149883
 Flying V – Aurora Boulevard,Aurora Boulevard,,,luzon,"Gasoline, Diesel",,,14.6251249,121.0580235,osm,way/263314302
-Flying V – Bacayan - Pit-os Road,Bacayan - Pit-os Road,,,luzon,"Gasoline, Diesel",,,10.3960752,123.921827,osm,way/1315901113
+Flying V – Bacayan - Pit-os Road,Bacayan - Pit-os Road,,,visayas,"Gasoline, Diesel",,,10.3960752,123.921827,osm,way/1315901113
 Flying V – Bagumbong Road,Bagumbong Road,,,luzon,"Gasoline, Diesel",,,14.7523598,121.0174443,osm,way/1085874849
 Flying V – Bancal-Leon Road,Bancal-Leon Road,,,luzon,"Gasoline, Diesel",,,10.7725527,122.3910439,osm,node/4893712728
-Flying V – Barotac Nuevo-Dumangas-Dacutan Wharf Road,Barotac Nuevo-Dumangas-Dacutan Wharf Road,,,luzon,"Gasoline, Diesel",,,10.8189726,122.7008128,osm,way/675334743
+Flying V – Barotac Nuevo-Dumangas-Dacutan Wharf Road,Barotac Nuevo-Dumangas-Dacutan Wharf Road,,,visayas,"Gasoline, Diesel",,,10.8189726,122.7008128,osm,way/675334743
 Flying V – Batangas,Batangas,,Batangas,luzon,"Gasoline, Diesel",,,14.0519498,120.9332286,osm,way/465133937
 Flying V – Benigno S. Aquino Avenue,Benigno S. Aquino Avenue,,,luzon,"Gasoline, Diesel",,,10.8285127,122.5262778,osm,way/170197129
 Flying V – Burgos Street,Burgos Street,,,luzon,"Gasoline, Diesel",,,10.6722282,122.9485045,osm,way/1387517983
-Flying V – Butuan-Cagayan de Oro-Iligan Road,Butuan-Cagayan de Oro-Iligan Road,,,luzon,"Gasoline, Diesel",,,8.5850566,124.7706364,osm,way/1054616594
+Flying V – Butuan-Cagayan de Oro-Iligan Road,Butuan-Cagayan de Oro-Iligan Road,,,mindanao,"Gasoline, Diesel",,,8.5850566,124.7706364,osm,way/1054616594
 Flying V – Cagayan Valley Road,Cagayan Valley Road,,,luzon,"Gasoline, Diesel",,,15.1941676,120.9586223,osm,way/812691272
 Flying V – Calapan South Road,Calapan South Road,,,luzon,"Gasoline, Diesel",,,13.0252379,121.4799349,osm,way/1424743792
 Flying V – Camalig Road,Camalig Road,,,luzon,"Gasoline, Diesel",,,14.7675075,121.0071656,osm,way/810660939
-Flying V – Cansaga - Tayud Road,Cansaga - Tayud Road,,,luzon,"Gasoline, Diesel",,,10.3678516,123.9860089,osm,way/1249362267
+Flying V – Cansaga - Tayud Road,Cansaga - Tayud Road,,,visayas,"Gasoline, Diesel",,,10.3678516,123.9860089,osm,way/1249362267
 Flying V – Carlos Street,Carlos Street,,,luzon,"Gasoline, Diesel",,,14.7025519,121.0435086,osm,way/795077643
 Flying V – Carmona Avenue,Carmona Avenue,,,luzon,"Gasoline, Diesel",,,8.9869078,125.3400512,osm,way/1326186760
 Flying V – Colon Street,Colon Street,,,luzon,"Gasoline, Diesel",,,8.3707179,126.3334667,osm,way/736421635
-Flying V – Davao-Cotabato National Highway,Davao-Cotabato National Highway,,,luzon,"Gasoline, Diesel",,,7.2764574,124.4225046,osm,way/313357344
+Flying V – Davao-Cotabato National Highway,Davao-Cotabato National Highway,,,mindanao,"Gasoline, Diesel",,,7.2764574,124.4225046,osm,way/313357344
 Flying V – Doctor T.S. Kintanar Street,Doctor T.S. Kintanar Street,,,luzon,"Gasoline, Diesel",,,9.8819049,123.6030371,osm,way/1044427856
 Flying V – Don Abella Drive,Don Abella Drive,,,luzon,"Gasoline, Diesel",,,13.5915789,122.3289615,osm,way/752089012
 Flying V – East Service Road,East Service Road,,,luzon,"Gasoline, Diesel",,,14.7226971,120.9854915,osm,way/934315124
@@ -47,7 +47,7 @@ Flying V – Jose Abad Santos Avenue,Jose Abad Santos Avenue,,,luzon,"Gasoline, 
 Flying V – Jose Abad Santos Avenue,Jose Abad Santos Avenue,,,luzon,"Gasoline, Diesel",00:00-24:00,,15.0651364,120.7237413,osm,way/899726454
 "Flying V – Josefa Llanes Escoda National Highway, Ilocos Norte","Josefa Llanes Escoda National Highway, Ilocos Norte",,Ilocos Norte,luzon,"Gasoline, Diesel",,,18.1701968,120.6039353,osm,node/11178365206
 Flying V – Kambal Road,Kambal Road,,,luzon,"Gasoline, Diesel",,,14.6950809,121.1231491,osm,way/874183160
-Flying V – Koronadal City - Tacurong City National Highway,Koronadal City - Tacurong City National Highway,,,luzon,"Gasoline, Diesel",,,6.6127361,124.7498733,osm,way/827235402
+Flying V – Koronadal City - Tacurong City National Highway,Koronadal City - Tacurong City National Highway,,,mindanao,"Gasoline, Diesel",,,6.6127361,124.7498733,osm,way/827235402
 Flying V – Krus Street,Krus Street,,,luzon,"Gasoline, Diesel",,,14.8315813,120.8844989,osm,way/1312381761
 Flying V – La Paz - Victoria Road,La Paz - Victoria Road,,,luzon,Diesel,,,15.4946291,120.7160056,osm,way/957425759
 Flying V – Laon Laan Street,Laon Laan Street,,,luzon,"Gasoline, Diesel",,,14.6126286,120.9869861,osm,way/288054894
@@ -62,19 +62,19 @@ Flying V – Maharlika Highway,Maharlika Highway,,,luzon,"Gasoline, Diesel",,,14
 Flying V – Maharlika Highway,Maharlika Highway,,,luzon,"Gasoline, Diesel",,,10.9552141,125.0301386,osm,way/819700806
 Flying V – Maharlika Highway,Maharlika Highway,,,luzon,"Gasoline, Diesel",,,13.9586385,122.0126971,osm,way/1246014051
 "Flying V – Maharlika Highway, Nueva Ecija","Maharlika Highway, Nueva Ecija",,Nueva Ecija,luzon,"Gasoline, Diesel",,,15.6104493,120.918624,osm,way/851503779
-Flying V – Makar-Marbel Road,Makar-Marbel Road,,,luzon,"Gasoline, Diesel",,,6.3471803,124.9375914,osm,way/997194800
+Flying V – Makar-Marbel Road,Makar-Marbel Road,,,mindanao,"Gasoline, Diesel",,,6.3471803,124.9375914,osm,way/997194800
 Flying V – Manila East Road,Manila East Road,,,luzon,"Gasoline, Diesel",,,14.4813194,121.2269456,osm,way/962773431
 Flying V – Manila North Road,Manila North Road,,,luzon,"Gasoline, Diesel",,,16.3984904,120.3558475,osm,way/379321121
 Flying V – Manila North Road,Manila North Road,,,luzon,"Gasoline, Diesel",,,17.3205208,120.4413592,osm,way/832883759
 Flying V – Manila North Road,Manila North Road,,,luzon,"Gasoline, Diesel",,,16.3270214,120.366168,osm,way/850700906
 Flying V – Manila North Road,Manila North Road,,,luzon,"RON 91, RON 95, Diesel",,,17.4158859,120.4741802,osm,way/991469416
-Flying V – Matalam - M'lang - Bagontapay Jct Road,Matalam - M'lang - Bagontapay Jct Road,,,luzon,"Gasoline, Diesel",,,6.9540315,124.8880132,osm,node/5243665923
-Flying V – Matina Aplaya Road,Matina Aplaya Road,,,luzon,"Gasoline, Diesel",,,7.0439331,125.5687752,osm,way/922813686
-Flying V – Merida-Ormoc Road,Merida-Ormoc Road,,,luzon,"Gasoline, Diesel",,,11.0279803,124.5890859,osm,node/11258862237
+Flying V – Matalam - M'lang - Bagontapay Jct Road,Matalam - M'lang - Bagontapay Jct Road,,,mindanao,"Gasoline, Diesel",,,6.9540315,124.8880132,osm,node/5243665923
+Flying V – Matina Aplaya Road,Matina Aplaya Road,,,mindanao,"Gasoline, Diesel",,,7.0439331,125.5687752,osm,way/922813686
+Flying V – Merida-Ormoc Road,Merida-Ormoc Road,,,visayas,"Gasoline, Diesel",,,11.0279803,124.5890859,osm,node/11258862237
 Flying V – Mount Apo Avenue,Mount Apo Avenue,,,luzon,"Gasoline, Diesel",,,14.5519498,121.1909278,osm,way/1188198174
 Flying V – National Highway,"National Highway, Tres de Mayo",,,luzon,"Gasoline, Diesel",,,6.7631276,125.3397406,osm,way/1207753651
 Flying V – Nueva Valencia National Road,Nueva Valencia National Road,,,luzon,"Gasoline, Diesel",,,10.5249001,122.531565,osm,way/630852804
-Flying V – Pagadian-Zamboanga City Highway,Pagadian-Zamboanga City Highway,,,luzon,"Gasoline, Diesel",,,7.8089238,122.6857438,osm,way/1427849393
+Flying V – Pagadian-Zamboanga City Highway,Pagadian-Zamboanga City Highway,,,mindanao,"Gasoline, Diesel",,,7.8089238,122.6857438,osm,way/1427849393
 Flying V – Payatas Road,Payatas Road,,,luzon,"Gasoline, Diesel",,,14.7422401,121.128235,osm,way/888996215
 Flying V – Quarry Road,Quarry Road,,,luzon,"Gasoline, Diesel",,,14.4958304,121.181039,osm,way/458980530
 Flying V – Quezon,Quezon,,Quezon,luzon,"RON 91, RON 95, Diesel",,,13.8562273,121.9564935,osm,way/963416287
@@ -89,12 +89,12 @@ Flying V – San Jose Street,San Jose Street,,,luzon,"Gasoline, Diesel",,,10.944
 Flying V – San Pedro Street,San Pedro Street,,,luzon,"Gasoline, Diesel",,,10.6991711,122.5485121,osm,way/936531109
 Flying V – Santa Cruz Street,Santa Cruz Street,,,luzon,"Gasoline, Diesel",,,14.3998361,120.8575501,osm,way/879565377
 Flying V – Santa Maria - Tungkong Mangga Road,Santa Maria - Tungkong Mangga Road,,,luzon,"Gasoline, Diesel",,,14.8082139,121.0007476,osm,way/1339383380
-Flying V – Sarangani-Davao del Sur Coastal Road,Sarangani-Davao del Sur Coastal Road,,,luzon,"Gasoline, Diesel",,,5.8187694,125.21061,osm,way/737545259
+Flying V – Sarangani-Davao del Sur Coastal Road,Sarangani-Davao del Sur Coastal Road,,,mindanao,"Gasoline, Diesel",,,5.8187694,125.21061,osm,way/737545259
 Flying V – Sumulong Highway,Sumulong Highway,,,luzon,"Gasoline, Diesel",,,14.6177138,121.1338681,osm,way/909582526
-Flying V – Surigao - Davao Coastal Road,Surigao - Davao Coastal Road,,,luzon,"RON 91, RON 95, Diesel",,,7.5789326,126.5565472,osm,way/178426056
-Flying V – Surigao-Davao Coastal Road,Surigao-Davao Coastal Road,,,luzon,"Gasoline, Diesel",,,7.1334926,125.8947404,osm,way/971860137
+Flying V – Surigao - Davao Coastal Road,Surigao - Davao Coastal Road,,,mindanao,"RON 91, RON 95, Diesel",,,7.5789326,126.5565472,osm,way/178426056
+Flying V – Surigao-Davao Coastal Road,Surigao-Davao Coastal Road,,,mindanao,"Gasoline, Diesel",,,7.1334926,125.8947404,osm,way/971860137
 Flying V – Susano Road,Susano Road,,,luzon,"Gasoline, Diesel",,,14.7341815,121.0344092,osm,way/796694448
-Flying V – Tagum - Panabo Circumferential Highway,Tagum - Panabo Circumferential Highway,,,luzon,"Gasoline, Diesel",,,7.5821256,125.7074545,osm,way/180934889
+Flying V – Tagum - Panabo Circumferential Highway,Tagum - Panabo Circumferential Highway,,,mindanao,"Gasoline, Diesel",,,7.5821256,125.7074545,osm,way/180934889
 Flying V – Tuguegarao Diversion Road II,Tuguegarao Diversion Road II,,,luzon,"Gasoline, Diesel",,,17.6263821,121.7301555,osm,node/11345719069
 Flying V – Zabarte Road,Zabarte Road,,,luzon,"Gasoline, Diesel",,,14.7606614,121.0438721,osm,way/874659736
 Flying V – Zambales Highway,Zambales Highway,,,luzon,"Gasoline, Diesel",,,15.3053421,120.0062523,osm,way/204255280

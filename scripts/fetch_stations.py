@@ -291,7 +291,10 @@ def fetch_osm():
             "address":  _osm_build_address(tags),
             "city":     city,
             "province": province,
-            "region":   guess_region(" ".join([city, province, tags.get("addr:region", "")])),
+            "region":   guess_region(" ".join([
+                            city, province, tags.get("addr:region", ""),
+                            street, tags.get("addr:full", ""),
+                        ])),
             "services": _osm_get_services(tags),
             "hours":    tags.get("opening_hours", ""),
             "phone":    tags.get("phone", tags.get("contact:phone", "")),
@@ -439,12 +442,13 @@ def station_card_html(s):
         for svc in s["services"]
     )
     hours_part = (
-        f'\n              <span class="station-card__hours">&#x1F552; {s["hours"]}</span>'
+        f'\n              <span class="station-card__hours">'
+        f'<span aria-hidden="true">&#x1F552;</span> {s["hours"]}</span>'
         if s["hours"] else ""
     )
     phone_part = (
         f'\n              <a href="tel:{s["phone"]}" class="station-card__phone">'
-        f'&#x260E; {s["phone"]}</a>'
+        f'<span aria-hidden="true">&#x260E;</span> {s["phone"]}</a>'
         if s["phone"] else ""
     )
     region_label = REGION_LABELS.get(s["region"], s["region"].upper())
@@ -460,7 +464,8 @@ def station_card_html(s):
         f'              <h3 class="station-card__name">{s["name"]}</h3>\n'
         f'            </div>\n'
         f'            <div class="station-card__body">\n'
-        f'              <p class="station-card__address">&#x1F4CD; {s["address"]}</p>\n'
+        f'              <p class="station-card__address">'
+        f'<span aria-hidden="true">&#x1F4CD;</span> {s["address"]}</p>\n'
         f'              <div class="station-card__services">{services_html}</div>\n'
         f'            </div>\n'
         f'{footer_part}'
