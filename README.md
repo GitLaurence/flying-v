@@ -88,6 +88,7 @@ Before going live, replace the following placeholders:
 - **Logo** — add `assets/images/logo.svg` and update `.site-header__logo` markup
 - **Hero images** — add photos to `assets/images/` and reference them via CSS `background-image` on `.hero` and `.page-hero`
 - **Contact details** — update phone numbers, address, and email across all pages
+- **Contact form backend** — `contact-form` in `contact.html` has no `action`/endpoint; `initContactForm` in `js/main.js` only simulates a submission client-side and discards the input. Wire it to a real endpoint (e.g. Formspree, Netlify Forms, or a custom API) before launch
 - **Google Maps** — replace the map placeholder in `contact.html` with an actual `<iframe>` embed
 - **Station data** — expand the station cards in `locations.html` with real addresses and hours
 
