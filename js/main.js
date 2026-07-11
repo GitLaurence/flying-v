@@ -53,9 +53,10 @@
       if (open) {
         var firstLink = nav.querySelector('.site-nav__link');
         if (firstLink) firstLink.focus();
-      } else if (wasOpen && nav.contains(document.activeElement)) {
-        // Only steal focus back if it was inside the panel we're closing —
-        // avoids yanking focus on e.g. the >=768px resize auto-close.
+      } else if (wasOpen && nav.contains(document.activeElement) && hamburger.offsetParent !== null) {
+        // Only steal focus back if it was inside the panel we're closing, and
+        // the hamburger is actually visible — at >=768px it's display:none,
+        // so focusing it would silently drop focus instead of restoring it.
         hamburger.focus();
       }
     }
@@ -115,7 +116,7 @@
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
       anchor.addEventListener('click', function (e) {
         var id = this.getAttribute('href');
-        if (id === '#') return;
+        if (id === '#') { e.preventDefault(); return; }
         var target = document.querySelector(id);
         if (!target) return;
         e.preventDefault();
@@ -300,7 +301,13 @@
       });
 
       navLinks.forEach(function (link) {
-        link.classList.toggle('is-active', current && link.getAttribute('href') === '#' + current.id);
+        var isActive = current && link.getAttribute('href') === '#' + current.id;
+        link.classList.toggle('is-active', isActive);
+        if (isActive) {
+          link.setAttribute('aria-current', 'true');
+        } else {
+          link.removeAttribute('aria-current');
+        }
       });
     }
 

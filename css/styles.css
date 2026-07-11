@@ -7,6 +7,9 @@
   --color-primary-light:  #F2D5DA;
   --color-accent:         #F5A623;
   --color-accent-dark:    #D4891A;
+  /* Lighter accent tint for accent-colored text on red backgrounds — #F5A623
+     on #C8102E is ~2.9:1, below WCAG AA; this hits ~5:1 while staying gold. */
+  --color-accent-on-red:  #FCE0A6;
 
   --color-black:          #0D0D0D;
   --color-gray-900:       #1A1A1A;
@@ -481,7 +484,7 @@ button { font-family: inherit; }
 
 .page-hero .container { position: relative; z-index: 1; }
 
-.page-hero__label { color: var(--color-accent); margin-bottom: var(--space-3); }
+.page-hero__label { color: var(--color-accent-on-red); margin-bottom: var(--space-3); }
 
 .page-hero__title {
   font-family: var(--font-heading);
@@ -718,7 +721,7 @@ button { font-family: inherit; }
   line-height: 1;
 }
 
-.stats-strip__plus { color: var(--color-accent); }
+.stats-strip__plus { color: var(--color-accent-on-red); }
 
 .stats-strip__label {
   font-size: var(--text-sm);
@@ -1010,6 +1013,8 @@ button { font-family: inherit; }
   display: block;
   margin-bottom: var(--space-2);
 }
+
+.fuel-card__header--premium .fuel-card__grade { color: var(--color-accent-on-red); }
 
 .fuel-card__name { font-size: var(--text-2xl); font-weight: var(--font-weight-extrabold); }
 .fuel-card__body { padding: var(--space-6); flex: 1; }
