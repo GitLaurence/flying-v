@@ -88,7 +88,7 @@
           </div>
           <button id="btn-search" class="btn btn--primary">Search</button>
         </div>
-        <p class="locator-search__count">
+        <p class="locator-search__count" role="status" aria-live="polite">
           Showing <strong id="station-count">0</strong> stations
         </p>
       </div>
@@ -1949,7 +1949,7 @@
         </div>
 
         <!-- Empty state -->
-        <div class="locator-empty" id="locator-empty" hidden>
+        <div class="locator-empty" id="locator-empty" role="status" aria-live="polite" hidden>
           <p>&#x1F50D; No stations found for your search.</p>
           <p style="margin-top: var(--space-2); font-size: var(--text-base);">Try a different city name or select a different region.</p>
           <button id="btn-reset" class="btn btn--outline" style="margin-top: var(--space-5);">
