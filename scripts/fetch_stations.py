@@ -22,6 +22,7 @@ No third-party dependencies — uses stdlib only.
 
 import argparse
 import csv
+import html
 import json
 import os
 import re
@@ -434,33 +435,39 @@ def write_csv(stations, path="scripts/flying_v_stations.csv"):
 
 
 def station_card_html(s):
+    name = html.escape(s["name"])
+    address = html.escape(s["address"])
+    hours = html.escape(s["hours"]) if s["hours"] else ""
+    phone = html.escape(s["phone"]) if s["phone"] else ""
+    region = html.escape(s["region"])
+
     services_html = "".join(
-        f'<span class="station-card__service">{svc}</span>'
+        f'<span class="station-card__service">{html.escape(svc)}</span>'
         for svc in s["services"]
     )
     hours_part = (
-        f'\n              <span class="station-card__hours">&#x1F552; {s["hours"]}</span>'
-        if s["hours"] else ""
+        f'\n              <span class="station-card__hours">&#x1F552; {hours}</span>'
+        if hours else ""
     )
     phone_part = (
-        f'\n              <a href="tel:{s["phone"]}" class="station-card__phone">'
-        f'&#x260E; {s["phone"]}</a>'
-        if s["phone"] else ""
+        f'\n              <a href="tel:{phone}" class="station-card__phone">'
+        f'&#x260E; {phone}</a>'
+        if phone else ""
     )
-    region_label = REGION_LABELS.get(s["region"], s["region"].upper())
+    region_label = html.escape(REGION_LABELS.get(s["region"], s["region"].upper()))
     footer_part = (
         f'            <div class="station-card__footer">{hours_part}{phone_part}\n'
         f'            </div>\n'
-        if s["hours"] or s["phone"] else ""
+        if hours or phone else ""
     )
     return (
-        f'          <article class="station-card" data-region="{s["region"]}">\n'
+        f'          <article class="station-card" data-region="{region}">\n'
         f'            <div class="station-card__header">\n'
         f'              <span class="station-card__region-badge">{region_label}</span>\n'
-        f'              <h3 class="station-card__name">{s["name"]}</h3>\n'
+        f'              <h3 class="station-card__name">{name}</h3>\n'
         f'            </div>\n'
         f'            <div class="station-card__body">\n'
-        f'              <p class="station-card__address">&#x1F4CD; {s["address"]}</p>\n'
+        f'              <p class="station-card__address">&#x1F4CD; {address}</p>\n'
         f'              <div class="station-card__services">{services_html}</div>\n'
         f'            </div>\n'
         f'{footer_part}'

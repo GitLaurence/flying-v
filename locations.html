@@ -88,7 +88,7 @@
           </div>
           <button id="btn-search" class="btn btn--primary">Search</button>
         </div>
-        <p class="locator-search__count">
+        <p class="locator-search__count" role="status" aria-live="polite">
           Showing <strong id="station-count">0</strong> stations
         </p>
       </div>
@@ -102,7 +102,7 @@
         <div class="station-grid" id="station-grid">
                                                                                                               <!-- STATIONS:START — 180 stations (osm), fetched 2026-07-06 06:45 UTC -->
 
-          <!-- ── NCR — Metro Manila (18) ── -->
+          <!-- ── NCR — Metro Manila (17) ── -->
           <article class="station-card" data-region="ncr">
             <div class="station-card__header">
               <span class="station-card__region-badge">NCR</span>
@@ -287,7 +287,7 @@
             </div>
           </article>
 
-          <!-- ── Luzon (143) ── -->
+          <!-- ── Luzon (134) ── -->
           <article class="station-card" data-region="luzon">
             <div class="station-card__header">
               <span class="station-card__region-badge">Luzon</span>
@@ -1749,7 +1749,7 @@
             </div>
           </article>
 
-          <!-- ── Visayas (2) ── -->
+          <!-- ── Visayas (10) ── -->
           <article class="station-card" data-region="visayas">
             <div class="station-card__header">
               <span class="station-card__region-badge">Visayas</span>
@@ -1771,7 +1771,7 @@
             </div>
           </article>
 
-          <!-- ── Mindanao (17) ── -->
+          <!-- ── Mindanao (19) ── -->
           <article class="station-card" data-region="mindanao">
             <div class="station-card__header">
               <span class="station-card__region-badge">Mindanao</span>
@@ -1949,7 +1949,7 @@
         </div>
 
         <!-- Empty state -->
-        <div class="locator-empty" id="locator-empty" hidden>
+        <div class="locator-empty" id="locator-empty" role="status" aria-live="polite" hidden>
           <p>&#x1F50D; No stations found for your search.</p>
           <p style="margin-top: var(--space-2); font-size: var(--text-base);">Try a different city name or select a different region.</p>
           <button id="btn-reset" class="btn btn--outline" style="margin-top: var(--space-5);">

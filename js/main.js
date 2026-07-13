@@ -209,7 +209,10 @@
         form.reset();
         form.style.display = 'none';
         var success = document.getElementById('form-success');
-        if (success) success.hidden = false;
+        if (success) {
+          success.hidden = false;
+          success.focus();
+        }
       }, 1200);
     });
   }
