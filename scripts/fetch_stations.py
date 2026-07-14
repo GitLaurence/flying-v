@@ -163,7 +163,36 @@ GENERIC_NAMES = {"flying v", "flying-v", "flyingv", "flying v gasoline station",
 
 # ── helpers ───────────────────────────────────────────────────────────────────
 
-def guess_region(text):
+def guess_region_by_coords(lat, lon):
+    """Fallback geographic classifier for stations with no place-name match.
+
+    Piecewise lat/lon bands approximating the Philippines' island groups —
+    imprecise right on inter-region borders, but far better than defaulting
+    every unmatched station to "luzon".
+    """
+    try:
+        lat, lon = float(lat), float(lon)
+    except (TypeError, ValueError):
+        return None
+    if 14.30 <= lat <= 14.80 and 120.90 <= lon <= 121.15:
+        return "ncr"
+    if lat >= 12.0 or lon < 120.3:
+        return "luzon"       # main Luzon landmass + Mindoro/Marinduque/Romblon/Palawan
+    if lat < 9.0:
+        return "mindanao"
+    if lat < 10.3 and lon >= 124.8:
+        return "mindanao"    # Caraga / Surigao area
+    return "visayas"
+
+
+def guess_region(text, lat=None, lon=None):
+    # Coordinates are ground truth when available — road names are not: e.g.
+    # "Manila North Road" runs through Ilocos, hundreds of km from NCR, and a
+    # generic "Manila" substring match would wrongly beat a more specific
+    # province match like "Rizal" in "Manila East Road, Rizal".
+    coord_region = guess_region_by_coords(lat, lon)
+    if coord_region:
+        return coord_region
     t = text.lower()
     for key, region in REGION_MAP_BY_SPECIFICITY:
         if key.lower() in t:
@@ -291,7 +320,10 @@ def fetch_osm():
             "address":  _osm_build_address(tags),
             "city":     city,
             "province": province,
-            "region":   guess_region(" ".join([city, province, tags.get("addr:region", "")])),
+            "region":   guess_region(
+                " ".join([raw_name, street, city, province, tags.get("addr:region", "")]),
+                lat, lon,
+            ),
             "services": _osm_get_services(tags),
             "hours":    tags.get("opening_hours", ""),
             "phone":    tags.get("phone", tags.get("contact:phone", "")),
@@ -332,7 +364,7 @@ def _station_from_google_place(place):
     loc = place.get("geometry", {}).get("location", {})
     lat, lon = loc.get("lat"), loc.get("lng")
 
-    region = guess_region(formatted)
+    region = guess_region(f"{raw_name} {formatted}", lat, lon)
     name = make_display_name(raw_name, city=city)
 
     return {
